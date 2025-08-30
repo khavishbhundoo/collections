@@ -10,7 +10,13 @@ func ExampleStack() {
 	s.PushMany(1, 2)
 	s.Push(3)
 
-	val, ok := s.Pop()
+	s2 := stack.NewWithCapacity[int](4)
+	s2.PushMany(1, 2, 3, 4)
+	s2.Push(3)
+	val, ok := s2.Pop()
+	fmt.Println(val, ok)
+
+	val, ok = s.Pop()
 	fmt.Println(val, ok)
 	fmt.Println(s.Size())
 	peek, ok := s.Peek()
@@ -23,11 +29,18 @@ func ExampleStack() {
 	peek, ok = s.Peek()
 	fmt.Println(peek, ok)
 
+	var s3 stack.Stack[int]
+	s3.Push(1)
+	val, ok = s3.Pop()
+	fmt.Println(val, ok)
+
 	// Output:
+	// 3 true
 	// 3 true
 	// 2
 	// 2 true
 	// 2
 	// 0 false
 	// 0 false
+	// 1 true
 }
