@@ -13,7 +13,7 @@ import "sync"
 // Use New() or NewWithCapacity() if you prefer an explicit constructor
 // or want to set an initial capacity.
 // All operations on Stack are safe for concurrent use by multiple goroutines.
-// If you do not need thread-safety, use the non-concurrent stack package for better performance.
+// If you do not need thread-safety, use the collections/stack package instead for better performance.
 type Stack[T any] struct {
 	_               noCopy // prevent accidental copy after first use
 	items           []T
