@@ -1,0 +1,31 @@
+goos: linux
+goarch: amd64
+pkg: collections/concurrent/stack
+cpu: AMD EPYC 7763 64-Core Processor
+BenchmarkStack_Push-2                	60601573	        20.27 ns/op	      48 B/op	       0 allocs/op
+BenchmarkStack_PushWithCapacity-2    	63276464	        18.37 ns/op	      46 B/op	       0 allocs/op
+BenchmarkStack_Pop-2                 	94646740	        12.15 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_PopWithCapacity-2     	108342847	        11.05 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_ClearAndPush10M-2     	       6	 191797164 ns/op	492000512 B/op	      49 allocs/op
+BenchmarkStack_ResetAndPush10M-2     	       9	 117381229 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_ConcurrentPush-2      	    3848	    272981 ns/op	  259536 B/op	      27 allocs/op
+BenchmarkStack_ConcurrentPop-2       	    2515	    474633 ns/op	  311719 B/op	      31 allocs/op
+BenchmarkStack_ConcurrentPushPop-2   	    4968	    258233 ns/op	   96728 B/op	      32 allocs/op
+PASS
+ok  	collections/concurrent/stack	10.980s
+PASS
+ok  	collections/concurrent/stack/example	0.003s
+goos: linux
+goarch: amd64
+pkg: collections/stack
+cpu: AMD EPYC 7763 64-Core Processor
+BenchmarkStack_Push-2               	132755329	         9.436 ns/op	      43 B/op	       0 allocs/op
+BenchmarkStack_PushWithCapacity-2   	163555178	         7.468 ns/op	      43 B/op	       0 allocs/op
+BenchmarkStack_Pop-2                	544398088	         2.190 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_PopWithCapacity-2    	597958747	         1.927 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_ClearAndPush10M-2    	      12	  95827742 ns/op	492000512 B/op	      49 allocs/op
+BenchmarkStack_ResetAndPush10M-2    	      46	  25405247 ns/op	       0 B/op	       0 allocs/op
+PASS
+ok  	collections/stack	7.336s
+PASS
+ok  	collections/stack/example	0.003s
