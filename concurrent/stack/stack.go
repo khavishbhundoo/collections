@@ -1,6 +1,8 @@
 package stack
 
-// Stack is a generic, non-thread-safe LIFO (last-in-first-out) stack
+import "sync"
+
+// Stack is a generic, thread-safe LIFO (last-in-first-out) stack
 // implementation backed by a dynamically resizing slice.
 //
 // The zero value of Stack[T] is ready to use without initialization:
@@ -10,10 +12,13 @@ package stack
 //
 // Use New() or NewWithCapacity() if you prefer an explicit constructor
 // or want to set an initial capacity.
-// If you do need thread-safety, use the collections/concurrent/stack package instead.
+// All operations on Stack are safe for concurrent use by multiple goroutines.
+// If you do not need thread-safety, use the non-concurrent stack package for better performance.
 type Stack[T any] struct {
+	_               noCopy // prevent accidental copy after first use
 	items           []T
 	initialCapacity int
+	mu              sync.RWMutex
 }
 
 // shrinkCapacityThreshold defines the minimum slice capacity before
@@ -59,6 +64,8 @@ func NewWithCapacity[T any](capacity int) *Stack[T] {
 //
 //	s.PushMany(1, 2, 3)
 func (s *Stack[T]) PushMany(item ...T) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	s.items = append(s.items, item...)
 }
 
@@ -68,6 +75,8 @@ func (s *Stack[T]) PushMany(item ...T) {
 //
 //	s.Push(42)
 func (s *Stack[T]) Push(item T) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	s.items = append(s.items, item)
 }
 
@@ -81,6 +90,8 @@ func (s *Stack[T]) Push(item T) {
 //	value, ok := s.Pop()
 //	if ok { fmt.Println(value) }
 func (s *Stack[T]) Pop() (T, bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if len(s.items) == 0 {
 		var zero T
 		return zero, false
@@ -122,6 +133,8 @@ func (s *Stack[T]) Pop() (T, bool) {
 //
 //	value, ok := s.Peek()
 func (s *Stack[T]) Peek() (T, bool) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 	if len(s.items) == 0 {
 		var zero T
 		return zero, false
@@ -135,6 +148,8 @@ func (s *Stack[T]) Peek() (T, bool) {
 //
 //	n := s.Size()
 func (s *Stack[T]) Size() int {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 	return len(s.items)
 }
 
@@ -146,6 +161,8 @@ func (s *Stack[T]) Size() int {
 //
 //	s.Reset()
 func (s *Stack[T]) Reset() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	s.items = s.items[:0]
 }
 
@@ -157,5 +174,20 @@ func (s *Stack[T]) Reset() {
 //
 //	s.Clear()
 func (s *Stack[T]) Clear() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	s.items = make([]T, 0, s.initialCapacity)
 }
+
+// noCopy may be added to structs which must not be copied
+// after the first use.
+//
+// See https://golang.org/issues/8005#issuecomment-190753527
+// for details.
+//
+// Note that it must not be embedded, due to the Lock and Unlock methods.
+type noCopy struct{}
+
+// Lock is a no-op used by -copylocks checker from `go vet`.
+func (*noCopy) Lock()   {}
+func (*noCopy) Unlock() {}
