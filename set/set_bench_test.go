@@ -99,7 +99,7 @@ func BenchmarkSet_Size(b *testing.B) {
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = s.Size()
+		_ = s.Len()
 	}
 }
 

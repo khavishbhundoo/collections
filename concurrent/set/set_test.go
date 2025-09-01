@@ -10,8 +10,8 @@ func TestSet_New(t *testing.T) {
 	if s == nil {
 		t.Fatal("Expected non-nil Set")
 	}
-	if s.Size() != 0 {
-		t.Errorf("Expected size 0, got %d", s.Size())
+	if s.Len() != 0 {
+		t.Errorf("Expected size 0, got %d", s.Len())
 	}
 }
 
@@ -21,15 +21,15 @@ func TestSet_NewWithCapacity(t *testing.T) {
 	if s == nil {
 		t.Fatal("Expected non-nil Set")
 	}
-	if s.Size() != 0 {
-		t.Errorf("Expected size 0, got %d", s.Size())
+	if s.Len() != 0 {
+		t.Errorf("Expected size 0, got %d", s.Len())
 	}
 
 	s.Add(1)
 	s.Add(2)
 	s.Add(3)
-	if s.Size() != 3 {
-		t.Errorf("Expected size 3, got %d", s.Size())
+	if s.Len() != 3 {
+		t.Errorf("Expected size 3, got %d", s.Len())
 	}
 }
 
@@ -45,22 +45,22 @@ func TestSet_Add(t *testing.T) {
 		}
 	}
 
-	if s.Size() != 3 {
-		t.Errorf("Expected size 3, got %d", s.Size())
+	if s.Len() != 3 {
+		t.Errorf("Expected size 3, got %d", s.Len())
 	}
 
 	// Adding duplicate should not increase size
 	s.Add(1)
-	if s.Size() != 3 {
-		t.Errorf("Expected size 3 after adding duplicate, got %d", s.Size())
+	if s.Len() != 3 {
+		t.Errorf("Expected size 3 after adding duplicate, got %d", s.Len())
 	}
 }
 
 func TestSet_AddMany(t *testing.T) {
 	s := New[int]()
 	s.AddMany(1, 2, 2, 3)
-	if s.Size() != 3 {
-		t.Errorf("Expected size 3, got %d", s.Size())
+	if s.Len() != 3 {
+		t.Errorf("Expected size 3, got %d", s.Len())
 	}
 	for _, v := range []int{1, 2, 3} {
 		if !s.Contains(v) {
@@ -77,14 +77,14 @@ func TestSet_Remove(t *testing.T) {
 	if s.Contains(2) {
 		t.Errorf("Expected 2 to be removed")
 	}
-	if s.Size() != 2 {
-		t.Errorf("Expected size 2, got %d", s.Size())
+	if s.Len() != 2 {
+		t.Errorf("Expected size 2, got %d", s.Len())
 	}
 
 	// Removing non-existent element should not panic
 	s.Remove(42)
-	if s.Size() != 2 {
-		t.Errorf("Expected size 2 after removing non-existent element, got %d", s.Size())
+	if s.Len() != 2 {
+		t.Errorf("Expected size 2 after removing non-existent element, got %d", s.Len())
 	}
 }
 
@@ -115,19 +115,19 @@ func TestSet_Contains(t *testing.T) {
 
 func TestSet_Size(t *testing.T) {
 	var s Set[int] // zero-value
-	if s.Size() != 0 {
-		t.Errorf("Expected size 0, got %d", s.Size())
+	if s.Len() != 0 {
+		t.Errorf("Expected size 0, got %d", s.Len())
 	}
 
 	s.Add(1)
 	s.Add(2)
-	if s.Size() != 2 {
-		t.Errorf("Expected size 2, got %d", s.Size())
+	if s.Len() != 2 {
+		t.Errorf("Expected size 2, got %d", s.Len())
 	}
 
 	s.Remove(1)
-	if s.Size() != 1 {
-		t.Errorf("Expected size 1, got %d", s.Size())
+	if s.Len() != 1 {
+		t.Errorf("Expected size 1, got %d", s.Len())
 	}
 }
 
@@ -135,8 +135,8 @@ func TestSet_Reset(t *testing.T) {
 	s := New[int]()
 	s.AddMany(1, 2, 3)
 	s.Reset()
-	if s.Size() != 0 {
-		t.Errorf("Expected size 0 after Reset, got %d", s.Size())
+	if s.Len() != 0 {
+		t.Errorf("Expected size 0 after Reset, got %d", s.Len())
 	}
 	if s.items == nil {
 		t.Errorf("Reset should retain underlying map, got nil")
@@ -147,8 +147,8 @@ func TestSet_Clear(t *testing.T) {
 	s := New[int]()
 	s.AddMany(1, 2, 3)
 	s.Clear()
-	if s.Size() != 0 {
-		t.Errorf("Expected size 0 after Clear, got %d", s.Size())
+	if s.Len() != 0 {
+		t.Errorf("Expected size 0 after Clear, got %d", s.Len())
 	}
 	if s.items == nil {
 		t.Errorf("Clear should allocate a new map, got nil")
@@ -169,8 +169,8 @@ func TestSet_ConcurrentAdd(t *testing.T) {
 	}
 	wg.Wait()
 
-	if s.Size() != n {
-		t.Errorf("Expected size %d after concurrent Add, got %d", n, s.Size())
+	if s.Len() != n {
+		t.Errorf("Expected size %d after concurrent Add, got %d", n, s.Len())
 	}
 }
 
@@ -198,9 +198,9 @@ func TestSet_ConcurrentAddAndRemove(t *testing.T) {
 	}
 	wg.Wait()
 
-	// Size could be anything between 0 and n depending on timing,
+	// Len could be anything between 0 and n depending on timing,
 	// but it should never be negative or > n.
-	size := s.Size()
+	size := s.Len()
 	if size < 0 || size > n {
 		t.Errorf("Unexpected size after concurrent Add/Remove: %d", size)
 	}
@@ -242,7 +242,7 @@ func TestSet_ConcurrentResetAndClear(t *testing.T) {
 	wg.Wait()
 
 	// Just ensure it's in a valid state (no panic/race)
-	if size := s.Size(); size < 0 {
+	if size := s.Len(); size < 0 {
 		t.Errorf("Invalid size after concurrent Reset/Clear: %d", size)
 	}
 }

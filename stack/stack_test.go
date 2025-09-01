@@ -25,8 +25,8 @@ func TestStack_NewWithCapacity(t *testing.T) {
 	s := NewWithCapacity[int](5)
 	s.Push(1)
 
-	if s.Size() != 1 {
-		t.Errorf("Size(): expected %d, got %d", 1, s.Size())
+	if s.Len() != 1 {
+		t.Errorf("Len(): expected %d, got %d", 1, s.Len())
 	}
 	if s.initialCapacity != 5 && cap(s.items) != 5 {
 		t.Errorf("Initial capacity: expected %d, got %d", 5, cap(s.items))
@@ -46,8 +46,8 @@ func TestStack_Push(t *testing.T) {
 	s.PushMany(1, 2, 3)
 	s.Push(1)
 
-	if s.Size() != 4 {
-		t.Errorf("Size(): expected %d, got %d", 4, s.Size())
+	if s.Len() != 4 {
+		t.Errorf("Len(): expected %d, got %d", 4, s.Len())
 	}
 }
 
@@ -55,8 +55,8 @@ func TestStack_Pop(t *testing.T) {
 	s := New[int]()
 	s.PushMany(1, 2, 3)
 
-	if s.Size() != 3 {
-		t.Errorf("Size(): expected %d, got %d", 3, s.Size())
+	if s.Len() != 3 {
+		t.Errorf("Len(): expected %d, got %d", 3, s.Len())
 	}
 
 	r, ok := s.Pop()
@@ -80,8 +80,8 @@ func TestStack_Size(t *testing.T) {
 	s := New[int]()
 	s.PushMany(1, 2, 3)
 
-	if s.Size() != 3 {
-		t.Errorf("Size(): expected %d, got %d", 3, s.Size())
+	if s.Len() != 3 {
+		t.Errorf("Len(): expected %d, got %d", 3, s.Len())
 	}
 }
 

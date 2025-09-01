@@ -11,11 +11,11 @@ func ExampleSet() {
 	s.Add(1)
 	s.Add(2)
 	s.Add(3)
-	fmt.Println("After Add:", s.Size())
+	fmt.Println("After Add:", s.Len())
 
 	// Add multiple elements at once
 	s.AddMany(3, 4, 5)
-	fmt.Println("After AddMany:", s.Size())
+	fmt.Println("After AddMany:", s.Len())
 
 	// Check if an element exists
 	fmt.Println("Contains 3?", s.Contains(3))
@@ -23,15 +23,15 @@ func ExampleSet() {
 
 	// Remove an element
 	s.Remove(2)
-	fmt.Println("After Remove 2:", s.Size())
+	fmt.Println("After Remove 2:", s.Len())
 
 	// Reset the set (keeps capacity)
 	s.Reset()
-	fmt.Println("After Reset:", s.Size())
+	fmt.Println("After Reset:", s.Len())
 
 	// Clear the set (resets map to initial capacity)
 	s.Clear()
-	fmt.Println("After Clear:", s.Size())
+	fmt.Println("After Clear:", s.Len())
 
 	// Output:
 	// After Add: 3

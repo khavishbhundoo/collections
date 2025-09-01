@@ -12,3 +12,5 @@ A collection of common data structures for Go in both thread safe and non-thread
 [Stack](concurrent/stack/)
 
 [Set](concurrent/set/)
+
+[CMap](concurrent/cmap/)

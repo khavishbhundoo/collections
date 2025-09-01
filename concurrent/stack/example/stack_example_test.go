@@ -19,10 +19,10 @@ func ExampleStack() {
 
 	val, ok = s.Pop()
 	fmt.Println(val, ok)
-	fmt.Println(s.Size())
+	fmt.Println(s.Len())
 	peek, ok := s.Peek()
 	fmt.Println(peek, ok)
-	fmt.Println(s.Size())
+	fmt.Println(s.Len())
 	s.Pop()
 	s.Pop()
 	val, ok = s.Pop()
@@ -45,7 +45,7 @@ func ExampleStack() {
 		}(i)
 	}
 	wg.Wait()
-	fmt.Println(cs.Size())
+	fmt.Println(cs.Len())
 
 	// Output:
 	// 3 true

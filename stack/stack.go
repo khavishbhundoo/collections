@@ -129,12 +129,12 @@ func (s *Stack[T]) Peek() (T, bool) {
 	return s.items[len(s.items)-1], true
 }
 
-// Size returns the current number of items in the stack.
+// Len returns the current number of items in the stack.
 //
 // Example:
 //
-//	n := s.Size()
-func (s *Stack[T]) Size() int {
+//	n := s.Len()
+func (s *Stack[T]) Len() int {
 	return len(s.items)
 }
 
