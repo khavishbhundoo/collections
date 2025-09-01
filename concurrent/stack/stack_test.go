@@ -26,8 +26,8 @@ func TestNewWithCapacity(t *testing.T) {
 	s := NewWithCapacity[int](5)
 	s.Push(1)
 	expected := 1
-	if s.Size() != 1 {
-		t.Error("Expected", expected, "Actual", s.Size())
+	if s.Len() != 1 {
+		t.Error("Expected", expected, "Actual", s.Len())
 	}
 	if s.initialCapacity != 5 && cap(s.items) != 5 {
 		t.Error("Expected", 5, "Actual", cap(s.items))
@@ -46,16 +46,16 @@ func TestStack_Push(t *testing.T) {
 	s := New[int]()
 	s.PushMany(1, 2, 3)
 	s.Push(1)
-	if s.Size() != 4 {
-		t.Error("Expected", 3, "Actual", s.Size())
+	if s.Len() != 4 {
+		t.Error("Expected", 3, "Actual", s.Len())
 	}
 }
 
 func TestStack_Pop(t *testing.T) {
 	s := New[int]()
 	s.PushMany(1, 2, 3)
-	if s.Size() != 3 {
-		t.Error("Expected", 3, "Actual", s.Size())
+	if s.Len() != 3 {
+		t.Error("Expected", 3, "Actual", s.Len())
 	}
 	expected := 3
 	r, ok := s.Pop()
@@ -79,8 +79,8 @@ func TestStack_Pop(t *testing.T) {
 func TestStack_Size(t *testing.T) {
 	s := New[int]()
 	s.PushMany(1, 2, 3)
-	if s.Size() != 3 {
-		t.Error("Expected", 3, "Actual", s.Size())
+	if s.Len() != 3 {
+		t.Error("Expected", 3, "Actual", s.Len())
 	}
 }
 
@@ -133,8 +133,8 @@ func TestStack_ConcurrentPush(t *testing.T) {
 	wg.Wait()
 
 	expectedSize := goroutines * pushesPerGoroutine
-	if s.Size() != expectedSize {
-		t.Errorf("Expected size %d after concurrent Push, got %d", expectedSize, s.Size())
+	if s.Len() != expectedSize {
+		t.Errorf("Expected size %d after concurrent Push, got %d", expectedSize, s.Len())
 	}
 }
 
@@ -153,8 +153,8 @@ func TestStack_ConcurrentPushMany(t *testing.T) {
 
 	wg.Wait()
 
-	if s.Size() != goroutines*3 {
-		t.Errorf("Expected size %d after concurrent PushMany, got %d", goroutines*3, s.Size())
+	if s.Len() != goroutines*3 {
+		t.Errorf("Expected size %d after concurrent PushMany, got %d", goroutines*3, s.Len())
 	}
 }
 
@@ -181,8 +181,8 @@ func TestStack_ConcurrentPop(t *testing.T) {
 	wg.Wait()
 
 	expectedSize := 1000 - (goroutines * popsPerGoroutine)
-	if s.Size() != expectedSize {
-		t.Errorf("Expected size %d after concurrent Pop, got %d", expectedSize, s.Size())
+	if s.Len() != expectedSize {
+		t.Errorf("Expected size %d after concurrent Pop, got %d", expectedSize, s.Len())
 	}
 }
 
@@ -211,7 +211,7 @@ func TestStack_ConcurrentPushPop(t *testing.T) {
 
 	wg.Wait()
 
-	size := s.Size()
+	size := s.Len()
 	if size < 0 || size > goroutines*opsPerGoroutine {
 		t.Errorf("Unexpected size %d after concurrent Push/Pop", size)
 	}
@@ -243,7 +243,7 @@ func TestStack_ConcurrentResetClear(t *testing.T) {
 	wg.Wait()
 
 	s.Reset()
-	if s.Size() != 0 {
+	if s.Len() != 0 {
 		t.Error("Expected size 0 after Reset")
 	}
 
@@ -251,7 +251,7 @@ func TestStack_ConcurrentResetClear(t *testing.T) {
 		s.PushMany(i, i+1)
 	}
 	s.Clear()
-	if s.Size() != 0 {
+	if s.Len() != 0 {
 		t.Error("Expected size 0 after Clear")
 	}
 }

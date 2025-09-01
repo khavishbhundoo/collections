@@ -81,9 +81,9 @@ func (s *Set[T]) Contains(value T) bool {
 	return exists
 }
 
-// Size returns the number of elements in the set.
+// Len returns the number of elements in the set.
 // Safe to call on a zero-value Set; returns 0 without allocating.
-func (s *Set[T]) Size() int {
+func (s *Set[T]) Len() int {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	if s.items == nil {

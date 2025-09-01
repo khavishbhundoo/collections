@@ -18,10 +18,10 @@ func ExampleStack() {
 
 	val, ok = s.Pop()
 	fmt.Println(val, ok)
-	fmt.Println(s.Size())
+	fmt.Println(s.Len())
 	peek, ok := s.Peek()
 	fmt.Println(peek, ok)
-	fmt.Println(s.Size())
+	fmt.Println(s.Len())
 	s.Pop()
 	s.Pop()
 	val, ok = s.Pop()
