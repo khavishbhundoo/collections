@@ -6,8 +6,20 @@ import (
 	"testing"
 )
 
+// --------------------
+// CMap Benchmarks
+// --------------------
+
 func BenchmarkCMap_Set(b *testing.B) {
 	m := New[string, int]()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		m.Set(strconv.Itoa(i), i)
+	}
+}
+
+func BenchmarkCMap_Set_PreSized(b *testing.B) {
+	m := NewWithCapacity[string, int](b.N)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		m.Set(strconv.Itoa(i), i)
@@ -38,6 +50,19 @@ func BenchmarkCMap_Contains(b *testing.B) {
 
 func BenchmarkCMap_ConcurrentSet(b *testing.B) {
 	m := New[string, int]()
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		i := 0
+		for pb.Next() {
+			key := strconv.Itoa(i)
+			m.Set(key, i)
+			i++
+		}
+	})
+}
+
+func BenchmarkCMap_ConcurrentSet_PreSized(b *testing.B) {
+	m := NewWithCapacity[string, int](b.N)
 	b.ResetTimer()
 	b.RunParallel(func(pb *testing.PB) {
 		i := 0
@@ -127,8 +152,20 @@ func BenchmarkCMap_ConcurrentMixed(b *testing.B) {
 	wg.Wait()
 }
 
+// --------------------
+// Raw map Benchmarks
+// --------------------
+
 func BenchmarkMap_Set(b *testing.B) {
 	m := make(map[string]int)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		m[strconv.Itoa(i)] = i
+	}
+}
+
+func BenchmarkMap_Set_PreSized(b *testing.B) {
+	m := make(map[string]int, b.N)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		m[strconv.Itoa(i)] = i
@@ -173,6 +210,22 @@ func BenchmarkMap_ConcurrentSet(b *testing.B) {
 	})
 }
 
+func BenchmarkMap_ConcurrentSet_PreSized(b *testing.B) {
+	m := make(map[string]int, b.N)
+	var mu sync.Mutex
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		i := 0
+		for pb.Next() {
+			key := strconv.Itoa(i)
+			mu.Lock()
+			m[key] = i
+			mu.Unlock()
+			i++
+		}
+	})
+}
+
 func BenchmarkMap_ConcurrentGet(b *testing.B) {
 	m := make(map[string]int)
 	const N = 100000
@@ -195,7 +248,6 @@ func BenchmarkMap_ConcurrentGet(b *testing.B) {
 
 func BenchmarkMap_ZeroValueSet(b *testing.B) {
 	var m map[int]int // zero-value map
-	// Need to initialize on first use
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if m == nil {
