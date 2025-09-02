@@ -3,6 +3,7 @@ package example
 import (
 	"collections/concurrent/cmap"
 	"fmt"
+	"sort"
 	"sync"
 )
 
@@ -25,6 +26,7 @@ func ExampleCMap() {
 
 	// Get all keys
 	keys := m.Keys()
+	sort.Strings(keys)
 	fmt.Println("Keys:", keys)
 
 	// Delete a key
@@ -44,7 +46,7 @@ func ExampleCMap() {
 	// Go = 1
 	// Contains C#? true
 	// Len = 2
-	// Keys: [Go C#]
+	// Keys: [C# Go]
 	// Contains Go after delete? false
 	// Len after Reset: 0
 	// Len after Clear: 0
