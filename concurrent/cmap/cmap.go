@@ -199,13 +199,31 @@ func (c *CMap[K, V]) Clear() {
 }
 
 func (c *CMap[K, V]) shardIndex(key K) uint64 {
-	h := maphash.Hash{}
+	var h maphash.Hash
 	h.SetSeed(c.seed)
-	h.Reset()
-	_, err := h.WriteString(fmt.Sprintf("%v", key))
-	if err != nil {
-		panic(err)
+
+	switch k := any(key).(type) {
+	case string:
+		_, _ = h.WriteString(k)
+	case int:
+		v := int64(k)
+		for i := 56; i >= 0; i -= 8 {
+			_ = h.WriteByte(byte(v >> i))
+		}
+	case int64:
+		v := k
+		for i := 56; i >= 0; i -= 8 {
+			_ = h.WriteByte(byte(v >> i))
+		}
+	case uint, uint64, uintptr:
+		v := any(k).(uint64)
+		for i := 56; i >= 0; i -= 8 {
+			_ = h.WriteByte(byte(v >> i))
+		}
+	default:
+		_, _ = h.WriteString(fmt.Sprintf("%v", key))
 	}
+
 	return h.Sum64() % shardCount
 }
 
