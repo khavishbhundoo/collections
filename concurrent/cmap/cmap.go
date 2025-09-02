@@ -1,6 +1,7 @@
 package cmap
 
 import (
+	"encoding/binary"
 	"fmt"
 	"hash/maphash"
 	"sync"
@@ -199,29 +200,38 @@ func (c *CMap[K, V]) Clear() {
 }
 
 func (c *CMap[K, V]) shardIndex(key K) uint64 {
-	var h maphash.Hash
+	h := maphash.Hash{}
 	h.SetSeed(c.seed)
+	h.Reset()
 
+	// Write key into the hash
 	switch k := any(key).(type) {
 	case string:
-		_, _ = h.WriteString(k)
+		if _, err := h.WriteString(k); err != nil {
+			panic(fmt.Sprintf("failed to write string key: %v", err))
+		}
 	case int:
-		v := int64(k)
-		for i := 56; i >= 0; i -= 8 {
-			_ = h.WriteByte(byte(v >> i))
+		var buf [8]byte
+		binary.LittleEndian.PutUint64(buf[:], uint64(k))
+		if _, err := h.Write(buf[:]); err != nil {
+			panic(fmt.Sprintf("failed to write int key: %v", err))
 		}
 	case int64:
-		v := k
-		for i := 56; i >= 0; i -= 8 {
-			_ = h.WriteByte(byte(v >> i))
+		var buf [8]byte
+		binary.LittleEndian.PutUint64(buf[:], uint64(k))
+		if _, err := h.Write(buf[:]); err != nil {
+			panic(fmt.Sprintf("failed to write int64 key: %v", err))
 		}
-	case uint, uint64, uintptr:
-		v := any(k).(uint64)
-		for i := 56; i >= 0; i -= 8 {
-			_ = h.WriteByte(byte(v >> i))
+	case uint64:
+		var buf [8]byte
+		binary.LittleEndian.PutUint64(buf[:], k)
+		if _, err := h.Write(buf[:]); err != nil {
+			panic(fmt.Sprintf("failed to write uint64 key: %v", err))
 		}
 	default:
-		_, _ = h.WriteString(fmt.Sprintf("%v", key))
+		if _, err := h.WriteString(fmt.Sprintf("%v", k)); err != nil {
+			panic(fmt.Sprintf("failed to write default key: %v", err))
+		}
 	}
 
 	return h.Sum64() % shardCount
