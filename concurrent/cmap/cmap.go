@@ -33,14 +33,17 @@ type CMap[K comparable, V any] struct {
 
 func (c *CMap[K, V]) init(capacity int) {
 	c.once.Do(func() {
-		c.seed = maphash.MakeSeed()
-		for i := 0; i < shardCount; i++ {
-			c.shards[i].mu = sync.RWMutex{}
-			if capacity <= shardCount {
-				c.shards[i].items = make(map[K]V)
-			} else {
-				c.shardCapacity = capacity / shardCount
-				c.shards[i].items = make(map[K]V, c.shardCapacity)
+		var zeroSeed maphash.Seed
+		if c.seed == zeroSeed {
+			c.seed = maphash.MakeSeed()
+			for i := 0; i < shardCount; i++ {
+				c.shards[i].mu = sync.RWMutex{}
+				if capacity <= shardCount {
+					c.shards[i].items = make(map[K]V)
+				} else {
+					c.shardCapacity = capacity / shardCount
+					c.shards[i].items = make(map[K]V, c.shardCapacity)
+				}
 			}
 		}
 	})
@@ -74,10 +77,7 @@ func NewWithCapacity[K comparable, V any](capacity int) *CMap[K, V] {
 // Set associates value with key, creating the map if necessary.
 // If key already exists, its value is replaced.
 func (c *CMap[K, V]) Set(key K, value V) {
-	var zeroSeed maphash.Seed
-	if c.seed == zeroSeed {
-		c.init(0)
-	}
+	c.init(0)
 	s := &c.shards[c.shardIndex(key)]
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -172,10 +172,7 @@ func (c *CMap[K, V]) Keys() []K {
 // Reset removes all entries while keeping the current allocation.
 // Use Reset to reuse the map without triggering new allocations.
 func (c *CMap[K, V]) Reset() {
-	var zeroSeed maphash.Seed
-	if c.seed == zeroSeed {
-		c.init(0)
-	}
+	c.init(0)
 
 	for i := range c.shards {
 		s := &c.shards[i]
