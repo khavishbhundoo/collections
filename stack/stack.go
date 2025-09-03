@@ -43,7 +43,7 @@ func New[T any]() *Stack[T] {
 //
 // Example:
 //
-//	s := stack.NewWithCapacity
+//	s := stack.NewWithCapacity[int](10)
 func NewWithCapacity[T any](capacity int) *Stack[T] {
 	return &Stack[T]{
 		items:           make([]T, 0, capacity),
