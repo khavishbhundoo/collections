@@ -89,27 +89,32 @@ func (s *Stack[T]) Pop() (T, bool) {
 	s.items = s.items[:len(s.items)-1]
 
 	// Reduce capacity if:
-	//   - slice is larger than the shrink threshold (avoid tiny slices reallocation),
-	//   - current capacity exceeds the initial capacity (never shrink below the original size),
-	//   - and fewer than 25% of elements are in use.
+	//   - slice is larger than the shrink threshold (avoid tiny slice reallocations),
+	//   - current capacity exceeds 2× the initial capacity (if any),
+	//   - and fewer than 12.5% of elements are in use (cap/8).
 	//
-	// Why 1/4 instead of 1/2?
-	//   Using 1/2 would trigger frequent grow/shrink oscillations if the
-	//   stack size hovers around the boundary. A 1/4 threshold provides
-	//   a buffer: it shrinks only when the slice is significantly underused.
+	// Why 1/8 instead of 1/4?
+	//   Using 1/4 is fine for general use, but in tight push/pop workloads
+	//   it may trigger frequent grow/shrink oscillations. Using 1/8 shrinks
+	//   only when the queue is significantly underutilized.
 	//
 	// Why halve capacity?
 	//   Halving avoids repeated reallocations while still reclaiming
-	//   unused memory proportionally. It’s a balance between performance
-	//   (fewer allocations) and memory efficiency.
-	if cap(s.items) > shrinkCapacityThreshold && cap(s.items) > s.initialCapacity && len(s.items) < cap(s.items)/4 {
-		newCap := cap(s.items) / 2
-		if newCap < s.initialCapacity {
+	//   unused memory proportionally. It balances memory efficiency and speed.
+	capNow := cap(s.items)
+	if capNow > shrinkCapacityThreshold &&
+		(s.initialCapacity == 0 || capNow > s.initialCapacity*2) &&
+		len(s.items) < capNow/8 {
+
+		newCap := capNow / 2
+		if s.initialCapacity > 0 && newCap < s.initialCapacity {
 			newCap = s.initialCapacity
 		}
-		newItems := make([]T, len(s.items), newCap)
-		copy(newItems, s.items)
-		s.items = newItems
+		if newCap != capNow { // only shrink if capacity actually changes
+			newItems := make([]T, len(s.items), newCap)
+			copy(newItems, s.items)
+			s.items = newItems
+		}
 	}
 
 	return item, true
