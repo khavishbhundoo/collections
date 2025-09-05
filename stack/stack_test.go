@@ -71,8 +71,13 @@ func TestStack_Pop(t *testing.T) {
 	if !ok {
 		t.Errorf("Pop(): expected OK, got NOK")
 	}
+	
 	if r != 2 {
 		t.Errorf("Pop(): expected %d, got %d", 2, r)
+	}
+
+	if s.Len() != 1 {
+		t.Errorf("Pop(): expected %d, got %d", 1, r)
 	}
 }
 
