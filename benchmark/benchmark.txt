@@ -2,109 +2,143 @@ goos: linux
 goarch: amd64
 pkg: collections/concurrent/cmap
 cpu: AMD EPYC 7763 64-Core Processor
-BenchmarkCMap_Set-2                      	 3647794	       349.2 ns/op	      95 B/op	       1 allocs/op
-BenchmarkCMap_Set_PreSized-2             	 9582216	       206.0 ns/op	       7 B/op	       0 allocs/op
-BenchmarkCMap_Get-2                      	 8157266	       195.2 ns/op	       7 B/op	       0 allocs/op
-BenchmarkCMap_Contains-2                 	 9248632	       197.6 ns/op	       7 B/op	       0 allocs/op
-BenchmarkCMap_ConcurrentSet-2            	 5852905	       280.6 ns/op	      46 B/op	       1 allocs/op
-BenchmarkCMap_ConcurrentSet_PreSized-2   	 8123352	       220.8 ns/op	       7 B/op	       0 allocs/op
-BenchmarkCMap_ConcurrentGet-2            	19874906	        60.45 ns/op	       5 B/op	       0 allocs/op
-BenchmarkCMap_ZeroValueSet-2             	 9017890	       202.6 ns/op	      67 B/op	       0 allocs/op
-BenchmarkCMap_Reset-2                    	91885471	        12.52 ns/op	       0 B/op	       0 allocs/op
-BenchmarkCMap_Clear-2                    	23658766	        46.13 ns/op	      48 B/op	       1 allocs/op
-BenchmarkCMap_Keys-2                     	   10000	    110325 ns/op	   81920 B/op	       1 allocs/op
-BenchmarkCMap_ConcurrentMixed-2          	 6085747	       248.7 ns/op	      49 B/op	       0 allocs/op
-BenchmarkMap_Set-2                       	 4540833	       388.8 ns/op	     106 B/op	       1 allocs/op
-BenchmarkMap_Set_PreSized-2              	 9447181	       192.0 ns/op	       7 B/op	       0 allocs/op
-BenchmarkMap_Get-2                       	 8324295	       197.5 ns/op	       7 B/op	       0 allocs/op
-BenchmarkMap_Contains-2                  	 9353304	       190.0 ns/op	       7 B/op	       0 allocs/op
-BenchmarkMap_ConcurrentSet-2             	 6120012	       273.3 ns/op	      44 B/op	       1 allocs/op
-BenchmarkMap_ConcurrentSet_PreSized-2    	 8007612	       217.9 ns/op	       7 B/op	       0 allocs/op
-BenchmarkMap_ConcurrentGet-2             	21532186	        55.42 ns/op	       5 B/op	       0 allocs/op
-BenchmarkMap_ZeroValueSet-2              	 9312770	       184.7 ns/op	      64 B/op	       0 allocs/op
-BenchmarkMap_Keys-2                      	   10569	    114700 ns/op	   81920 B/op	       1 allocs/op
+BenchmarkCMap_Set-2                      	 3618458	       362.6 ns/op	      90 B/op	       1 allocs/op
+BenchmarkCMap_Set_PreSized-2             	 9317646	       208.7 ns/op	       7 B/op	       0 allocs/op
+BenchmarkCMap_Get-2                      	 8061921	       203.8 ns/op	       7 B/op	       0 allocs/op
+BenchmarkCMap_Contains-2                 	 7525084	       204.3 ns/op	       7 B/op	       0 allocs/op
+BenchmarkCMap_ConcurrentSet-2            	 5671681	       294.8 ns/op	      47 B/op	       1 allocs/op
+BenchmarkCMap_ConcurrentSet_PreSized-2   	 7747244	       216.7 ns/op	       7 B/op	       0 allocs/op
+BenchmarkCMap_ConcurrentGet-2            	20315956	        59.49 ns/op	       5 B/op	       0 allocs/op
+BenchmarkCMap_ZeroValueSet-2             	 8562165	       216.9 ns/op	      70 B/op	       0 allocs/op
+BenchmarkCMap_Reset-2                    	94037394	        12.26 ns/op	       0 B/op	       0 allocs/op
+BenchmarkCMap_Clear-2                    	24138991	        46.77 ns/op	      48 B/op	       1 allocs/op
+BenchmarkCMap_Keys-2                     	    9768	    111069 ns/op	   81920 B/op	       1 allocs/op
+BenchmarkCMap_ConcurrentMixed-2          	 5753889	       256.3 ns/op	      52 B/op	       0 allocs/op
+BenchmarkMap_Set-2                       	 4440030	       429.9 ns/op	     108 B/op	       1 allocs/op
+BenchmarkMap_Set_PreSized-2              	 9736782	       198.6 ns/op	       7 B/op	       0 allocs/op
+BenchmarkMap_Get-2                       	 7407978	       204.9 ns/op	       7 B/op	       0 allocs/op
+BenchmarkMap_Contains-2                  	 8194071	       194.0 ns/op	       7 B/op	       0 allocs/op
+BenchmarkMap_ConcurrentSet-2             	 6203691	       277.6 ns/op	      43 B/op	       1 allocs/op
+BenchmarkMap_ConcurrentSet_PreSized-2    	 7776026	       217.4 ns/op	       7 B/op	       0 allocs/op
+BenchmarkMap_ConcurrentGet-2             	21745386	        54.80 ns/op	       5 B/op	       0 allocs/op
+BenchmarkMap_ZeroValueSet-2              	 9163267	       193.4 ns/op	      66 B/op	       0 allocs/op
+BenchmarkMap_Keys-2                      	   10542	    112904 ns/op	   81920 B/op	       1 allocs/op
 PASS
-ok  	collections/concurrent/cmap	54.790s
+ok  	collections/concurrent/cmap	53.241s
 PASS
-ok  	collections/concurrent/cmap/example	0.002s
+ok  	collections/concurrent/cmap/example	0.003s
+goos: linux
+goarch: amd64
+pkg: collections/concurrent/queue
+cpu: AMD EPYC 7763 64-Core Processor
+BenchmarkQueue_Push-2                          	63330723	        17.47 ns/op	      46 B/op	       0 allocs/op
+BenchmarkQueue_PushWithCapacity-2              	68586807	        16.39 ns/op	      42 B/op	       0 allocs/op
+BenchmarkQueue_Pop-2                           	100000000	        10.49 ns/op	       0 B/op	       0 allocs/op
+BenchmarkQueue_PopWithCapacity-2               	114641986	        10.48 ns/op	       0 B/op	       0 allocs/op
+BenchmarkQueue_ClearAndPush10M-2               	       6	 177762310 ns/op	492000528 B/op	      49 allocs/op
+BenchmarkQueue_ResetAndPush10M-2               	      10	 104525556 ns/op	       0 B/op	       0 allocs/op
+BenchmarkQueue_ClearAndPush10MWithCapacity-2   	      10	 109020974 ns/op	80003072 B/op	       1 allocs/op
+BenchmarkQueue_ResetAndPush10MWithCapacity-2   	      10	 104141972 ns/op	       0 B/op	       0 allocs/op
+PASS
+ok  	collections/concurrent/queue	9.362s
+PASS
+ok  	collections/concurrent/queue/example	0.002s
 goos: linux
 goarch: amd64
 pkg: collections/concurrent/set
 cpu: AMD EPYC 7763 64-Core Processor
-BenchmarkSet_Add-2                                      	 9966796	       181.4 ns/op	      60 B/op	       0 allocs/op
-BenchmarkSet_Add_PreSized-2                             	17411096	       154.3 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_AddMany100_FreshEmpty-2                    	  202342	      5569 ns/op	    4696 B/op	      12 allocs/op
-BenchmarkSet_AddMany100_FreshPreSized-2                 	  473901	      2363 ns/op	    2440 B/op	       5 allocs/op
-BenchmarkSet_AddMany100_AmortizedPreSized-2             	 1000000	      1432 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_Remove-2                                   	19292163	        59.63 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_Contains-2                                 	70525886	        17.15 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_Size-2                                     	221171646	         5.434 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_Reset_1k-2                                 	   52612	     22771 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_Clear_1k_InitialCapacityZero-2             	   15758	     75858 ns/op	   74456 B/op	      22 allocs/op
-BenchmarkSet_Clear_1k_PreSized-2                        	   47030	     25619 ns/op	   36992 B/op	       6 allocs/op
-BenchmarkConcurrentSet_Add-2                            	 1347097	       882.6 ns/op	      56 B/op	       0 allocs/op
-BenchmarkConcurrentSet_Add_PreSized-2                   	 1613364	       794.4 ns/op	       0 B/op	       0 allocs/op
-BenchmarkConcurrentSet_AddMany100_FreshEmpty-2          	   33690	     33616 ns/op	   37568 B/op	      96 allocs/op
-BenchmarkConcurrentSet_AddMany100_FreshPreSized-2       	   89108	     13740 ns/op	   19520 B/op	      40 allocs/op
-BenchmarkConcurrentSet_AddMany100_AmortizedPreSized-2   	  106219	     13098 ns/op	       0 B/op	       0 allocs/op
-BenchmarkConcurrentSet_Remove-2                         	 1000000	      1265 ns/op	       0 B/op	       0 allocs/op
-BenchmarkConcurrentSet_Contains-2                       	 4172158	       289.8 ns/op	       0 B/op	       0 allocs/op
-BenchmarkConcurrentSet_Size-2                           	 6583948	       188.1 ns/op	       0 B/op	       0 allocs/op
-BenchmarkConcurrentSet_Reset_1k-2                       	    5820	    203038 ns/op	       0 B/op	       0 allocs/op
-BenchmarkConcurrentSet_Clear_1k_InitialCapacityZero-2   	    1690	    688893 ns/op	  556815 B/op	     165 allocs/op
-BenchmarkConcurrentSet_Clear_1k_PreSized-2              	    5116	    226485 ns/op	  295938 B/op	      48 allocs/op
-BenchmarkConcurrentSet_AddRemove-2                      	 1000000	      1111 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Add-2                                      	10397368	       188.4 ns/op	      58 B/op	       0 allocs/op
+BenchmarkSet_Add_PreSized-2                             	17245874	       157.5 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_AddMany100_FreshEmpty-2                    	  201991	      5901 ns/op	    4696 B/op	      12 allocs/op
+BenchmarkSet_AddMany100_FreshPreSized-2                 	  468562	      2404 ns/op	    2440 B/op	       5 allocs/op
+BenchmarkSet_AddMany100_AmortizedPreSized-2             	 1000000	      1323 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Remove-2                                   	19360274	        61.83 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Contains-2                                 	69481718	        16.60 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Size-2                                     	222895629	         5.358 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Reset_1k-2                                 	   51842	     23159 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Clear_1k_InitialCapacityZero-2             	   15733	     76887 ns/op	   74456 B/op	      22 allocs/op
+BenchmarkSet_Clear_1k_PreSized-2                        	   47072	     25519 ns/op	   36992 B/op	       6 allocs/op
+BenchmarkConcurrentSet_Add-2                            	 1344122	       890.6 ns/op	      56 B/op	       0 allocs/op
+BenchmarkConcurrentSet_Add_PreSized-2                   	 1546563	       787.3 ns/op	       0 B/op	       0 allocs/op
+BenchmarkConcurrentSet_AddMany100_FreshEmpty-2          	   35481	     33888 ns/op	   37568 B/op	      96 allocs/op
+BenchmarkConcurrentSet_AddMany100_FreshPreSized-2       	   85869	     14258 ns/op	   19520 B/op	      40 allocs/op
+BenchmarkConcurrentSet_AddMany100_AmortizedPreSized-2   	  103234	     12761 ns/op	       0 B/op	       0 allocs/op
+BenchmarkConcurrentSet_Remove-2                         	  992671	      1342 ns/op	       0 B/op	       0 allocs/op
+BenchmarkConcurrentSet_Contains-2                       	 4155134	       292.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkConcurrentSet_Size-2                           	 6314977	       188.6 ns/op	       0 B/op	       0 allocs/op
+BenchmarkConcurrentSet_Reset_1k-2                       	    5826	    202892 ns/op	       0 B/op	       0 allocs/op
+BenchmarkConcurrentSet_Clear_1k_InitialCapacityZero-2   	    1705	    684103 ns/op	  560957 B/op	     166 allocs/op
+BenchmarkConcurrentSet_Clear_1k_PreSized-2              	    4808	    228618 ns/op	  295937 B/op	      48 allocs/op
+BenchmarkConcurrentSet_AddRemove-2                      	 1000000	      1148 ns/op	       0 B/op	       0 allocs/op
 PASS
-ok  	collections/concurrent/set	36.427s
+ok  	collections/concurrent/set	36.536s
 PASS
-ok  	collections/concurrent/set/example	0.003s
+ok  	collections/concurrent/set/example	0.002s
 goos: linux
 goarch: amd64
 pkg: collections/concurrent/stack
 cpu: AMD EPYC 7763 64-Core Processor
-BenchmarkStack_Push-2                	64713232	        17.43 ns/op	      45 B/op	       0 allocs/op
-BenchmarkStack_PushWithCapacity-2    	67209242	        18.22 ns/op	      43 B/op	       0 allocs/op
-BenchmarkStack_Pop-2                 	100000000	        11.01 ns/op	       0 B/op	       0 allocs/op
-BenchmarkStack_PopWithCapacity-2     	108832178	        11.01 ns/op	       0 B/op	       0 allocs/op
-BenchmarkStack_ClearAndPush10M-2     	       6	 179143426 ns/op	492001386 B/op	      49 allocs/op
-BenchmarkStack_ResetAndPush10M-2     	      10	 107671758 ns/op	       0 B/op	       0 allocs/op
-BenchmarkStack_ConcurrentPush-2      	    4220	    266845 ns/op	  259534 B/op	      27 allocs/op
-BenchmarkStack_ConcurrentPop-2       	    2490	    468697 ns/op	  311720 B/op	      31 allocs/op
-BenchmarkStack_ConcurrentPushPop-2   	    4768	    255881 ns/op	   88831 B/op	      32 allocs/op
+BenchmarkStack_Push-2                	59482159	        18.74 ns/op	      49 B/op	       0 allocs/op
+BenchmarkStack_PushWithCapacity-2    	63476419	        18.19 ns/op	      46 B/op	       0 allocs/op
+BenchmarkStack_Pop-2                 	96333877	        11.95 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_PopWithCapacity-2     	112443584	        10.64 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_ClearAndPush10M-2     	       6	 188647228 ns/op	492000528 B/op	      49 allocs/op
+BenchmarkStack_ResetAndPush10M-2     	       9	 117235592 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_ConcurrentPush-2      	    4299	    260127 ns/op	  259534 B/op	      27 allocs/op
+BenchmarkStack_ConcurrentPop-2       	    2652	    468332 ns/op	  311720 B/op	      31 allocs/op
+BenchmarkStack_ConcurrentPushPop-2   	    4388	    241396 ns/op	   86053 B/op	      32 allocs/op
 PASS
-ok  	collections/concurrent/stack	10.795s
+ok  	collections/concurrent/stack	10.722s
 PASS
 ok  	collections/concurrent/stack/example	0.003s
 goos: linux
 goarch: amd64
+pkg: collections/queue
+cpu: AMD EPYC 7763 64-Core Processor
+BenchmarkQueue_Push-2                  	186312885	        20.57 ns/op	      48 B/op	       0 allocs/op
+BenchmarkQueue_PushWithCapacity-2      	1000000000	        16.33 ns/op	       0 B/op	       0 allocs/op
+BenchmarkQueue_PushMany-2              	  221830	     17890 ns/op	   43451 B/op	       0 allocs/op
+BenchmarkQueue_Pop-2                   	413288611	         8.005 ns/op	       0 B/op	       0 allocs/op
+BenchmarkQueue_PopWithCapacity-2       	379372033	         3.143 ns/op	       0 B/op	       0 allocs/op
+BenchmarkQueue_PushPop-2               	147509642	         8.469 ns/op	      43 B/op	       0 allocs/op
+BenchmarkQueue_PushPopWithCapacity-2   	390838556	         3.066 ns/op	       8 B/op	       0 allocs/op
+BenchmarkQueue_Peek-2                  	1000000000	         0.6240 ns/op	       0 B/op	       0 allocs/op
+BenchmarkQueue_Reset-2                 	1000000000	         0.6401 ns/op	       0 B/op	       0 allocs/op
+BenchmarkQueue_Clear-2                 	   26274	     51873 ns/op	  212992 B/op	       1 allocs/op
+PASS
+ok  	collections/queue	97.807s
+PASS
+ok  	collections/queue/example	0.018s
+goos: linux
+goarch: amd64
 pkg: collections/set
 cpu: AMD EPYC 7763 64-Core Processor
-BenchmarkSet_Add-2                            	11837745	       164.5 ns/op	      51 B/op	       0 allocs/op
-BenchmarkSet_Add_PreSized-2                   	22009268	       139.3 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_AddMany100_FreshEmpty-2          	  214936	      5231 ns/op	    4456 B/op	       9 allocs/op
-BenchmarkSet_AddMany100_FreshPreSized-2       	  531434	      2061 ns/op	    2344 B/op	       3 allocs/op
-BenchmarkSet_AddMany100_AmortizedPreSized-2   	 1000000	      1289 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_Remove-2                         	28551781	        41.21 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_Contains-2                       	114358440	        10.40 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_Size-2                           	1000000000	         0.6261 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_Reset_1k-2                       	   59977	     19958 ns/op	       0 B/op	       0 allocs/op
-BenchmarkSet_Clear_1k_InitialCapacityZero-2   	   16222	     73903 ns/op	   74456 B/op	      22 allocs/op
-BenchmarkSet_Clear_1k_PreSized-2              	   54368	     21846 ns/op	   36992 B/op	       6 allocs/op
+BenchmarkSet_Add-2                            	11632767	       167.6 ns/op	      52 B/op	       0 allocs/op
+BenchmarkSet_Add_PreSized-2                   	18795205	       141.3 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_AddMany100_FreshEmpty-2          	  214126	      5246 ns/op	    4456 B/op	       9 allocs/op
+BenchmarkSet_AddMany100_FreshPreSized-2       	  556497	      2044 ns/op	    2344 B/op	       3 allocs/op
+BenchmarkSet_AddMany100_AmortizedPreSized-2   	 1000000	      1265 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Remove-2                         	28272310	        41.11 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Contains-2                       	115063802	        10.37 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Size-2                           	1000000000	         0.3125 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Reset_1k-2                       	   60015	     20152 ns/op	       0 B/op	       0 allocs/op
+BenchmarkSet_Clear_1k_InitialCapacityZero-2   	   16059	     74234 ns/op	   74456 B/op	      22 allocs/op
+BenchmarkSet_Clear_1k_PreSized-2              	   53922	     22065 ns/op	   36992 B/op	       6 allocs/op
 PASS
-ok  	collections/set	17.988s
+ok  	collections/set	17.350s
 PASS
-ok  	collections/set/example	0.002s
+ok  	collections/set/example	0.014s
 goos: linux
 goarch: amd64
 pkg: collections/stack
 cpu: AMD EPYC 7763 64-Core Processor
-BenchmarkStack_Push-2               	136596744	         9.026 ns/op	      41 B/op	       0 allocs/op
-BenchmarkStack_PushWithCapacity-2   	169389636	         8.152 ns/op	      42 B/op	       0 allocs/op
-BenchmarkStack_Pop-2                	547982090	         2.297 ns/op	       0 B/op	       0 allocs/op
-BenchmarkStack_PopWithCapacity-2    	600950552	         1.892 ns/op	       0 B/op	       0 allocs/op
-BenchmarkStack_ClearAndPush10M-2    	      19	  71662961 ns/op	492000517 B/op	      49 allocs/op
-BenchmarkStack_ResetAndPush10M-2    	      46	  25187577 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_Push-2               	138203961	         8.857 ns/op	      41 B/op	       0 allocs/op
+BenchmarkStack_PushWithCapacity-2   	166313709	         7.810 ns/op	      43 B/op	       0 allocs/op
+BenchmarkStack_Pop-2                	542009204	         2.191 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_PopWithCapacity-2    	517650862	         2.343 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStack_ClearAndPush10M-2    	      13	  77276999 ns/op	492000512 B/op	      49 allocs/op
+BenchmarkStack_ResetAndPush10M-2    	      54	  22024541 ns/op	       0 B/op	       0 allocs/op
 PASS
-ok  	collections/stack	7.691s
+ok  	collections/stack	7.314s
 PASS
-ok  	collections/stack/example	0.003s
+ok  	collections/stack/example	0.015s
