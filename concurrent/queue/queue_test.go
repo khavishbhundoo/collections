@@ -4,7 +4,6 @@ import (
 	"sync"
 	"sync/atomic"
 	"testing"
-	"time"
 )
 
 func TestQueue_New(t *testing.T) {
@@ -283,10 +282,11 @@ func TestQueue_ConcurrentPushPop(t *testing.T) {
 	const goroutines = 10
 	const opsPerG = 500
 	q := New[int]()
-	var wg sync.WaitGroup
-	wg.Add(goroutines * 2)
 
-	// Pushers
+	var wg sync.WaitGroup
+
+	// --- Pushers ---
+	wg.Add(goroutines)
 	for g := 0; g < goroutines; g++ {
 		go func(base int) {
 			defer wg.Done()
@@ -296,27 +296,30 @@ func TestQueue_ConcurrentPushPop(t *testing.T) {
 		}(g)
 	}
 
-	// Poppers
+	// Wait for all pushers to finish
+	wg.Wait()
+
+	// --- Poppers ---
 	var popCount atomic.Int64
+	wg.Add(goroutines)
 	for g := 0; g < goroutines; g++ {
 		go func() {
 			defer wg.Done()
 			for {
-				_, ok := q.Pop()
+				val, ok := q.Pop()
 				if !ok {
-					time.Sleep(time.Microsecond)
-					if q.Len() == 0 {
-						return
-					}
-					continue
+					return
 				}
+				_ = val
 				popCount.Add(1)
 			}
 		}()
 	}
 
+	// Wait for all poppers to finish
 	wg.Wait()
 
+	// --- Assertions ---
 	expected := goroutines * opsPerG
 	if popCount.Load() != int64(expected) {
 		t.Errorf("Expected %d total pops, got %d", expected, popCount.Load())
