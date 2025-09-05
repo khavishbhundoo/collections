@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test-and-bench:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -27,11 +27,35 @@ jobs:
       - name: Vet code
         run: go vet ./...
 
-      - name: Run tests
+      - name: Run all tests
         run: go test ./... -v
 
-      - name: Run tests with race detector
+      - name: Run all tests with race detector
         run: go test ./... -v -race
 
-      - name: Run benchmarks
-        run: go test ./... -bench=. -benchmem -run=^$
+  benchmarks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        pkg:
+          - ./collections/stack
+          - ./collections/set
+          - ./collections/queue
+          - ./collections/concurrent/stack
+          - ./collections/concurrent/set
+          - ./collections/concurrent/queue
+          - ./collections/concurrent/cmap
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Download dependencies
+        run: go mod tidy
+
+      - name: Run benchmarks for ${{ matrix.pkg }}
+        run: go test ${{ matrix.pkg }} -bench=. -benchmem -run=^$
