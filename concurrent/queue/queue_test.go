@@ -1,7 +1,10 @@
 package queue
 
 import (
+	"sync"
+	"sync/atomic"
 	"testing"
+	"time"
 )
 
 func TestQueue_New(t *testing.T) {
@@ -213,5 +216,112 @@ func TestQueue_GenericType(t *testing.T) {
 	r, ok = q.Pop()
 	if !ok || r != "bar" {
 		t.Errorf("Pop(): expected 'bar', got '%s'", r)
+	}
+}
+
+func TestQueue_ConcurrentPush(t *testing.T) {
+	const goroutines = 10
+	const perGoroutine = 1000
+
+	q := New[int]()
+	var wg sync.WaitGroup
+	wg.Add(goroutines)
+
+	for g := 0; g < goroutines; g++ {
+		go func(base int) {
+			defer wg.Done()
+			for i := 0; i < perGoroutine; i++ {
+				q.Push(base*perGoroutine + i)
+			}
+		}(g)
+	}
+
+	wg.Wait()
+
+	if q.Len() != goroutines*perGoroutine {
+		t.Errorf("Len(): expected %d, got %d", goroutines*perGoroutine, q.Len())
+	}
+}
+
+func TestQueue_ConcurrentPop(t *testing.T) {
+	const total = 2000
+	q := New[int]()
+
+	for i := 0; i < total; i++ {
+		q.Push(i)
+	}
+
+	var wg sync.WaitGroup
+	var popped atomic.Int64
+	const goroutines = 5
+	wg.Add(goroutines)
+
+	for g := 0; g < goroutines; g++ {
+		go func() {
+			defer wg.Done()
+			for {
+				_, ok := q.Pop()
+				if !ok {
+					return
+				}
+				popped.Add(1)
+			}
+		}()
+	}
+
+	wg.Wait()
+
+	if popped.Load() != int64(total) {
+		t.Errorf("Expected %d pops, got %d", total, popped.Load())
+	}
+	if q.Len() != 0 {
+		t.Errorf("Expected empty queue, got Len() = %d", q.Len())
+	}
+}
+
+func TestQueue_ConcurrentPushPop(t *testing.T) {
+	const goroutines = 10
+	const opsPerG = 500
+	q := New[int]()
+	var wg sync.WaitGroup
+	wg.Add(goroutines * 2)
+
+	// Pushers
+	for g := 0; g < goroutines; g++ {
+		go func(base int) {
+			defer wg.Done()
+			for i := 0; i < opsPerG; i++ {
+				q.Push(base*opsPerG + i)
+			}
+		}(g)
+	}
+
+	// Poppers
+	var popCount atomic.Int64
+	for g := 0; g < goroutines; g++ {
+		go func() {
+			defer wg.Done()
+			for {
+				_, ok := q.Pop()
+				if !ok {
+					time.Sleep(time.Microsecond)
+					if q.Len() == 0 {
+						return
+					}
+					continue
+				}
+				popCount.Add(1)
+			}
+		}()
+	}
+
+	wg.Wait()
+
+	expected := goroutines * opsPerG
+	if popCount.Load() != int64(expected) {
+		t.Errorf("Expected %d total pops, got %d", expected, popCount.Load())
+	}
+	if q.Len() != 0 {
+		t.Errorf("Expected empty queue, got Len() = %d", q.Len())
 	}
 }
