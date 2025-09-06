@@ -1,12 +1,8 @@
 package queue
 
 // Queue is a generic, non-thread-safe FIFO (first-in-first-out) queue
-// implementation backed by a dynamically resizing slice.
-//
-// The zero value of Queue[T] is ready to use without initialization:
-//
-//	var q queue.Queue[int]
-//	q.Push(1)
+// implementation backed by a dynamically resizing slice.The zero value
+// of Queue[T] is ready to use without initialization
 //
 // Use New() or NewWithCapacity() if you prefer an explicit constructor
 // or want to set an initial capacity.

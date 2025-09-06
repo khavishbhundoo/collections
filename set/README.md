@@ -21,14 +21,9 @@ import "collections/set"
 
 
 <a name="Set"></a>
-## type [Set](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L11-L14>)
+## type [Set](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L9-L12>)
 
-Set is a generic, non\-thread\-safe set implementation backed by a map\[T\]struct\{\}. It stores unique elements of type T. The zero value of Set\[T\] is ready to use:
-
-```
-var s set.Set[int]
-s.Add(1)
-```
+Set is a generic, non\-thread\-safe set implementation backed by a map\[T\]struct\{\}. It stores unique elements of type T. The zero value of Set\[T\] is ready to use without initialization.
 
 Use New\(\) or NewWithCapacity\(\) to explicitly create a set or provide an initial capacity. For a thread\-safe set, see collections/concurrent/set.
 
@@ -38,8 +33,78 @@ type Set[T comparable] struct {
 }
 ```
 
+<details><summary>Example</summary>
+<p>
+
+
+
+```go
+package main
+
+import (
+        "collections/set"
+        "fmt"
+)
+
+func main() {
+        s := set.New[int]()
+
+        s.Add(1)
+        s.Add(2)
+        s.Add(3)
+        fmt.Println("After Add:", s.Len())
+
+        // Add multiple elements at once
+        s.AddMany(3, 4, 5)
+        fmt.Println("After AddMany:", s.Len())
+
+        // Check if an element exists
+        fmt.Println("Contains 3?", s.Contains(3))
+        fmt.Println("Contains 10?", s.Contains(10))
+
+        // Remove an element
+        s.Remove(2)
+        fmt.Println("After Remove 2:", s.Len())
+
+        // Reset the set (keeps capacity)
+        s.Reset()
+        fmt.Println("After Reset:", s.Len())
+
+        // Clear the set (resets map to initial capacity)
+        s.Clear()
+        fmt.Println("After Clear:", s.Len())
+
+        s2 := set.NewWithCapacity[int](3)
+        s2.AddMany(1, 2, 3)
+        fmt.Println(s2.Len())
+
+        //The zero value of Set[T] is ready to use without initialization
+        var s3 set.Set[int]
+        s3.Add(1)
+        fmt.Println(s3.Contains(1))
+
+}
+```
+
+#### Output
+
+```
+After Add: 3
+After AddMany: 5
+Contains 3? true
+Contains 10? false
+After Remove 2: 4
+After Reset: 0
+After Clear: 0
+3
+true
+```
+
+</p>
+</details>
+
 <a name="New"></a>
-### func [New](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L18>)
+### func [New](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L16>)
 
 ```go
 func New[T comparable]() *Set[T]
@@ -48,7 +113,7 @@ func New[T comparable]() *Set[T]
 New creates an empty set of type T with no pre\-allocated capacity. Equivalent to declaring \`var s set.Set\[int\]\`.
 
 <a name="NewWithCapacity"></a>
-### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L27>)
+### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L25>)
 
 ```go
 func NewWithCapacity[T comparable](capacity int) *Set[T]
@@ -57,7 +122,7 @@ func NewWithCapacity[T comparable](capacity int) *Set[T]
 NewWithCapacity creates an empty set with a capacity hint for the underlying map. Useful when you know approximately how many elements the set will contain.
 
 <a name="Set[T].Add"></a>
-### func \(\*Set\[T\]\) [Add](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L36>)
+### func \(\*Set\[T\]\) [Add](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L34>)
 
 ```go
 func (s *Set[T]) Add(value T)
@@ -66,7 +131,7 @@ func (s *Set[T]) Add(value T)
 Add inserts a value into the set. If the value already exists, it does nothing. Initializes the underlying map if it is nil.
 
 <a name="Set[T].AddMany"></a>
-### func \(\*Set\[T\]\) [AddMany](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L45>)
+### func \(\*Set\[T\]\) [AddMany](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L43>)
 
 ```go
 func (s *Set[T]) AddMany(values ...T)
@@ -75,7 +140,7 @@ func (s *Set[T]) AddMany(values ...T)
 AddMany inserts multiple values into the set. Duplicates are ignored. Initializes the underlying map if it is nil, sizing it to hold all values.
 
 <a name="Set[T].Clear"></a>
-### func \(\*Set\[T\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L93>)
+### func \(\*Set\[T\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L91>)
 
 ```go
 func (s *Set[T]) Clear()
@@ -84,7 +149,7 @@ func (s *Set[T]) Clear()
 Clear removes all elements and resets the underlying map to the initial capacity. Always allocates a new map.
 
 <a name="Set[T].Contains"></a>
-### func \(\*Set\[T\]\) [Contains](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L64>)
+### func \(\*Set\[T\]\) [Contains](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L62>)
 
 ```go
 func (s *Set[T]) Contains(value T) bool
@@ -93,7 +158,7 @@ func (s *Set[T]) Contains(value T) bool
 Contains reports whether a value exists in the set. Safe to call on a zero\-value Set; returns false without allocating.
 
 <a name="Set[T].Len"></a>
-### func \(\*Set\[T\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L74>)
+### func \(\*Set\[T\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L72>)
 
 ```go
 func (s *Set[T]) Len() int
@@ -102,7 +167,7 @@ func (s *Set[T]) Len() int
 Len returns the number of elements in the set. Safe to call on a zero\-value Set; returns 0 without allocating.
 
 <a name="Set[T].Remove"></a>
-### func \(\*Set\[T\]\) [Remove](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L55>)
+### func \(\*Set\[T\]\) [Remove](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L53>)
 
 ```go
 func (s *Set[T]) Remove(value T)
@@ -111,7 +176,7 @@ func (s *Set[T]) Remove(value T)
 Remove deletes a value from the set if it exists. Safe on a zero\-value Set.
 
 <a name="Set[T].Reset"></a>
-### func \(\*Set\[T\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L83>)
+### func \(\*Set\[T\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/set/set.go#L81>)
 
 ```go
 func (s *Set[T]) Reset()

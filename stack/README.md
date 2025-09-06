@@ -21,16 +21,9 @@ import "collections/stack"
 
 
 <a name="Stack"></a>
-## type [Stack](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L14-L17>)
+## type [Stack](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L10-L13>)
 
-Stack is a generic, non\-thread\-safe LIFO \(last\-in\-first\-out\) stack implementation backed by a dynamically resizing slice.
-
-The zero value of Stack\[T\] is ready to use without initialization:
-
-```
-var s stack.Stack[int]
-s.Push(1)
-```
+Stack is a generic, non\-thread\-safe LIFO \(last\-in\-first\-out\) stack implementation backed by a dynamically resizing slice.The zero value of Stack\[T\] is ready to use without initialization.
 
 Use New\(\) or NewWithCapacity\(\) if you prefer an explicit constructor or want to set an initial capacity. If you do need thread\-safety, use the collections/concurrent/stack package instead.
 
@@ -40,8 +33,70 @@ type Stack[T any] struct {
 }
 ```
 
+<details><summary>Example</summary>
+<p>
+
+
+
+```go
+package main
+
+import (
+        "collections/stack"
+        "fmt"
+)
+
+func main() {
+        s := stack.New[int]()
+        s.PushMany(1, 2)
+        s.Push(3)
+
+        s2 := stack.NewWithCapacity[int](4)
+        s2.PushMany(1, 2, 3, 4)
+        s2.Push(3)
+        val, ok := s2.Pop()
+        fmt.Println(val, ok)
+
+        val, ok = s.Pop()
+        fmt.Println(val, ok)
+        fmt.Println(s.Len())
+        peek, ok := s.Peek()
+        fmt.Println(peek, ok)
+        fmt.Println(s.Len())
+        s.Pop()
+        s.Pop()
+        val, ok = s.Pop()
+        fmt.Println(val, ok)
+        peek, ok = s.Peek()
+        fmt.Println(peek, ok)
+
+        //The zero value of Stack[T] is ready to use without initialization
+        var s3 stack.Stack[int]
+        s3.Push(1)
+        val, ok = s3.Pop()
+        fmt.Println(val, ok)
+
+}
+```
+
+#### Output
+
+```
+3 true
+3 true
+2
+2 true
+2
+0 false
+0 false
+1 true
+```
+
+</p>
+</details>
+
 <a name="New"></a>
-### func [New](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L33>)
+### func [New](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L25>)
 
 ```go
 func New[T any]() *Stack[T]
@@ -49,14 +104,8 @@ func New[T any]() *Stack[T]
 
 New creates an empty stack of type T with no pre\-allocated capacity. Use this when you don't know in advance how many elements you will push. This is equivalent to creating a stack as \`var s stack.Stack\[int\]\`
 
-Example:
-
-```
-s := stack.New[int]()
-```
-
 <a name="NewWithCapacity"></a>
-### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L47>)
+### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L35>)
 
 ```go
 func NewWithCapacity[T any](capacity int) *Stack[T]
@@ -64,14 +113,8 @@ func NewWithCapacity[T any](capacity int) *Stack[T]
 
 NewWithCapacity creates an empty stack of type T with a pre\-allocated capacity. This avoids repeated allocations if you know roughly how many elements you’ll push.
 
-Example:
-
-```
-s := stack.NewWithCapacity
-```
-
 <a name="Stack[T].Clear"></a>
-### func \(\*Stack\[T\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L159>)
+### func \(\*Stack\[T\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L123>)
 
 ```go
 func (s *Stack[T]) Clear()
@@ -79,14 +122,8 @@ func (s *Stack[T]) Clear()
 
 Clear removes all items and reallocates a slice with the initial capacity \(if any\). Use this to shrink the backing array explicitly.
 
-Example:
-
-```
-s.Clear()
-```
-
 <a name="Stack[T].Len"></a>
-### func \(\*Stack\[T\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L137>)
+### func \(\*Stack\[T\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L109>)
 
 ```go
 func (s *Stack[T]) Len() int
@@ -94,14 +131,8 @@ func (s *Stack[T]) Len() int
 
 Len returns the current number of items in the stack.
 
-Example:
-
-```
-n := s.Len()
-```
-
 <a name="Stack[T].Peek"></a>
-### func \(\*Stack\[T\]\) [Peek](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L124>)
+### func \(\*Stack\[T\]\) [Peek](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L100>)
 
 ```go
 func (s *Stack[T]) Peek() (T, bool)
@@ -109,14 +140,8 @@ func (s *Stack[T]) Peek() (T, bool)
 
 Peek returns the top element of the stack without removing it. The boolean return is false if the stack is empty.
 
-Example:
-
-```
-value, ok := s.Peek()
-```
-
 <a name="Stack[T].Pop"></a>
-### func \(\*Stack\[T\]\) [Pop](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L83>)
+### func \(\*Stack\[T\]\) [Pop](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L58>)
 
 ```go
 func (s *Stack[T]) Pop() (T, bool)
@@ -124,15 +149,8 @@ func (s *Stack[T]) Pop() (T, bool)
 
 Pop removes and returns the top element of the stack. The boolean return is false if the stack is empty. The stack may shrink its capacity automatically if it has grown significantly and is mostly empty.
 
-Example:
-
-```
-value, ok := s.Pop()
-if ok { fmt.Println(value) }
-```
-
 <a name="Stack[T].Push"></a>
-### func \(\*Stack\[T\]\) [Push](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L70>)
+### func \(\*Stack\[T\]\) [Push](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L50>)
 
 ```go
 func (s *Stack[T]) Push(item T)
@@ -140,14 +158,8 @@ func (s *Stack[T]) Push(item T)
 
 Push adds a single item to the top of the stack.
 
-Example:
-
-```
-s.Push(42)
-```
-
 <a name="Stack[T].PushMany"></a>
-### func \(\*Stack\[T\]\) [PushMany](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L61>)
+### func \(\*Stack\[T\]\) [PushMany](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L45>)
 
 ```go
 func (s *Stack[T]) PushMany(item ...T)
@@ -155,25 +167,13 @@ func (s *Stack[T]) PushMany(item ...T)
 
 PushMany pushes one or more items onto the stack in order. Equivalent to calling Push repeatedly but more efficient when adding multiple elements.
 
-Example:
-
-```
-s.PushMany(1, 2, 3)
-```
-
 <a name="Stack[T].Reset"></a>
-### func \(\*Stack\[T\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L148>)
+### func \(\*Stack\[T\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/stack/stack.go#L116>)
 
 ```go
 func (s *Stack[T]) Reset()
 ```
 
 Reset clears all items but keeps the current capacity of the underlying slice. This is faster than Clear\(\) when you expect to reuse the same stack size.
-
-Example:
-
-```
-s.Reset()
-```
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

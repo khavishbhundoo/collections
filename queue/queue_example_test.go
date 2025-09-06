@@ -1,4 +1,4 @@
-package example
+package queue_test
 
 import (
 	"collections/queue"
@@ -29,6 +29,7 @@ func ExampleQueue() {
 	peek, ok = s.Peek()
 	fmt.Println(peek, ok)
 
+	// The zero value of Queue[T] is ready to use without initialization
 	var s3 queue.Queue[int]
 	s3.Push(1)
 	val, ok = s3.Pop()

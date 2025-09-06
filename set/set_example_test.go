@@ -1,4 +1,4 @@
-package set_example
+package set_test
 
 import (
 	"collections/set"
@@ -33,6 +33,15 @@ func ExampleSet() {
 	s.Clear()
 	fmt.Println("After Clear:", s.Len())
 
+	s2 := set.NewWithCapacity[int](3)
+	s2.AddMany(1, 2, 3)
+	fmt.Println(s2.Len())
+
+	//The zero value of Set[T] is ready to use without initialization
+	var s3 set.Set[int]
+	s3.Add(1)
+	fmt.Println(s3.Contains(1))
+
 	// Output:
 	// After Add: 3
 	// After AddMany: 5
@@ -41,4 +50,6 @@ func ExampleSet() {
 	// After Remove 2: 4
 	// After Reset: 0
 	// After Clear: 0
+	// 3
+	// true
 }
