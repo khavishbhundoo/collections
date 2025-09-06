@@ -21,16 +21,9 @@ import "collections/queue"
 
 
 <a name="Queue"></a>
-## type [Queue](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L14-L17>)
+## type [Queue](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L10-L13>)
 
-Queue is a generic, non\-thread\-safe FIFO \(first\-in\-first\-out\) queue implementation backed by a dynamically resizing slice.
-
-The zero value of Queue\[T\] is ready to use without initialization:
-
-```
-var q queue.Queue[int]
-q.Push(1)
-```
+Queue is a generic, non\-thread\-safe FIFO \(first\-in\-first\-out\) queue implementation backed by a dynamically resizing slice.The zero value of Queue\[T\] is ready to use without initialization
 
 Use New\(\) or NewWithCapacity\(\) if you prefer an explicit constructor or want to set an initial capacity. If you do need thread\-safety, use the collections/concurrent/queue package instead.
 
@@ -40,8 +33,70 @@ type Queue[T any] struct {
 }
 ```
 
+<details><summary>Example</summary>
+<p>
+
+
+
+```go
+package main
+
+import (
+        "collections/queue"
+        "fmt"
+)
+
+func main() {
+        s := queue.New[int]()
+        s.PushMany(1, 2)
+        s.Push(3)
+
+        s2 := queue.NewWithCapacity[int](4)
+        s2.PushMany(1, 2, 3, 4)
+        s2.Push(3)
+        val, ok := s2.Pop()
+        fmt.Println(val, ok)
+
+        val, ok = s.Pop()
+        fmt.Println(val, ok)
+        fmt.Println(s.Len())
+        peek, ok := s.Peek()
+        fmt.Println(peek, ok)
+        fmt.Println(s.Len())
+        s.Pop()
+        s.Pop()
+        val, ok = s.Pop()
+        fmt.Println(val, ok)
+        peek, ok = s.Peek()
+        fmt.Println(peek, ok)
+
+        // The zero value of Queue[T] is ready to use without initialization
+        var s3 queue.Queue[int]
+        s3.Push(1)
+        val, ok = s3.Pop()
+        fmt.Println(val, ok)
+
+}
+```
+
+#### Output
+
+```
+1 true
+1 true
+2
+2 true
+2
+0 false
+0 false
+1 true
+```
+
+</p>
+</details>
+
 <a name="New"></a>
-### func [New](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L33>)
+### func [New](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L29>)
 
 ```go
 func New[T any]() *Queue[T]
@@ -56,7 +111,7 @@ q := queue.New[int]()
 ```
 
 <a name="NewWithCapacity"></a>
-### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L47>)
+### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L43>)
 
 ```go
 func NewWithCapacity[T any](capacity int) *Queue[T]
@@ -71,7 +126,7 @@ s := queue.NewWithCapacity[int](10)
 ```
 
 <a name="Queue[T].Clear"></a>
-### func \(\*Queue\[T\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L164>)
+### func \(\*Queue\[T\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L160>)
 
 ```go
 func (q *Queue[T]) Clear()
@@ -86,7 +141,7 @@ q.Clear()
 ```
 
 <a name="Queue[T].Len"></a>
-### func \(\*Queue\[T\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L142>)
+### func \(\*Queue\[T\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L138>)
 
 ```go
 func (q *Queue[T]) Len() int
@@ -101,7 +156,7 @@ n := s.Len()
 ```
 
 <a name="Queue[T].Peek"></a>
-### func \(\*Queue\[T\]\) [Peek](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L129>)
+### func \(\*Queue\[T\]\) [Peek](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L125>)
 
 ```go
 func (q *Queue[T]) Peek() (T, bool)
@@ -116,7 +171,7 @@ value, ok := q.Peek()
 ```
 
 <a name="Queue[T].Pop"></a>
-### func \(\*Queue\[T\]\) [Pop](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L83>)
+### func \(\*Queue\[T\]\) [Pop](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L79>)
 
 ```go
 func (q *Queue[T]) Pop() (T, bool)
@@ -132,7 +187,7 @@ if ok { fmt.Println(value) }
 ```
 
 <a name="Queue[T].Push"></a>
-### func \(\*Queue\[T\]\) [Push](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L70>)
+### func \(\*Queue\[T\]\) [Push](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L66>)
 
 ```go
 func (q *Queue[T]) Push(item T)
@@ -147,7 +202,7 @@ q.Push(42)
 ```
 
 <a name="Queue[T].PushMany"></a>
-### func \(\*Queue\[T\]\) [PushMany](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L61>)
+### func \(\*Queue\[T\]\) [PushMany](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L57>)
 
 ```go
 func (q *Queue[T]) PushMany(item ...T)
@@ -162,7 +217,7 @@ q.PushMany(1, 2, 3)
 ```
 
 <a name="Queue[T].Reset"></a>
-### func \(\*Queue\[T\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L153>)
+### func \(\*Queue\[T\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/queue/queue.go#L149>)
 
 ```go
 func (q *Queue[T]) Reset()

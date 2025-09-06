@@ -1,4 +1,4 @@
-package stack_example
+package stack_test
 
 import (
 	"collections/concurrent/stack"
@@ -30,6 +30,7 @@ func ExampleStack() {
 	peek, ok = s.Peek()
 	fmt.Println(peek, ok)
 
+	//The zero value of Stack[T] is ready to use without initialization
 	var s3 stack.Stack[int]
 	s3.Push(1)
 	val, ok = s3.Pop()

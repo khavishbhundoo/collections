@@ -3,12 +3,8 @@ package queue
 import "sync"
 
 // Queue is a generic, thread-safe FIFO (first-in-first-out) queue
-// implementation backed by a dynamically resizing slice.
-//
-// The zero value of Queue[T] is ready to use without initialization:
-//
-//	var q queue.Queue[int]
-//	q.Push(1)
+// implementation backed by a dynamically resizing slice.The zero value
+// of Queue[T] is ready to use without initialization.
 //
 // Use New() or NewWithCapacity() if you prefer an explicit constructor
 // or want to set an initial capacity.
@@ -31,10 +27,6 @@ const shrinkCapacityThreshold = 16
 // New creates an empty queue of type T with no pre-allocated capacity.
 // Use this when you don't know in advance how many elements you will push.
 // This is equivalent to creating a queue as `var q queue.Queue[int]`
-//
-// Example:
-//
-//	q := queue.New[int]()
 func New[T any]() *Queue[T] {
 	return &Queue[T]{
 		items:           []T{},
@@ -45,10 +37,6 @@ func New[T any]() *Queue[T] {
 // NewWithCapacity creates an empty queue of type T with a pre-allocated
 // capacity. This avoids repeated allocations if you know roughly how
 // many elements you’ll push.
-//
-// Example:
-//
-//	s := queue.NewWithCapacity[int](10)
 func NewWithCapacity[T any](capacity int) *Queue[T] {
 	return &Queue[T]{
 		items:           make([]T, 0, capacity),
@@ -59,10 +47,6 @@ func NewWithCapacity[T any](capacity int) *Queue[T] {
 // PushMany pushes one or more items onto the queue in order.
 // Equivalent to calling Push repeatedly but more efficient
 // when adding multiple elements.
-//
-// Example:
-//
-//	q.PushMany(1, 2, 3)
 func (q *Queue[T]) PushMany(item ...T) {
 	q.mu.Lock()
 	defer q.mu.Unlock()
@@ -70,10 +54,6 @@ func (q *Queue[T]) PushMany(item ...T) {
 }
 
 // Push adds a single item to the end of the queue.
-//
-// Example:
-//
-//	q.Push(42)
 func (q *Queue[T]) Push(item T) {
 	q.mu.Lock()
 	defer q.mu.Unlock()
@@ -84,11 +64,6 @@ func (q *Queue[T]) Push(item T) {
 // The boolean return is false if the queue is empty.
 // The queue may shrink its capacity automatically if
 // it has grown significantly and is mostly empty.
-//
-// Example:
-//
-//	value, ok := q.Pop()
-//	if ok { fmt.Println(value) }
 func (q *Queue[T]) Pop() (T, bool) {
 	q.mu.Lock()
 	defer q.mu.Unlock()
@@ -133,10 +108,6 @@ func (q *Queue[T]) Pop() (T, bool) {
 
 // Peek returns the front of the queue without removing it.
 // The boolean return is false if the queue is empty.
-//
-// Example:
-//
-//	value, ok := q.Peek()
 func (q *Queue[T]) Peek() (T, bool) {
 	q.mu.RLock()
 	defer q.mu.RUnlock()
@@ -148,10 +119,6 @@ func (q *Queue[T]) Peek() (T, bool) {
 }
 
 // Len returns the current number of items in the queue.
-//
-// Example:
-//
-//	n := s.Len()
 func (q *Queue[T]) Len() int {
 	q.mu.RLock()
 	defer q.mu.RUnlock()
@@ -161,10 +128,6 @@ func (q *Queue[T]) Len() int {
 // Reset clears all items but keeps the current capacity
 // of the underlying slice. This is faster than Clear()
 // when you expect to reuse the same queue size.
-//
-// Example:
-//
-//	q.Reset()
 func (q *Queue[T]) Reset() {
 	q.mu.Lock()
 	defer q.mu.Unlock()
@@ -174,10 +137,6 @@ func (q *Queue[T]) Reset() {
 // Clear removes all items and reallocates a slice with
 // the initial capacity (if any). Use this to shrink the
 // backing array explicitly.
-//
-// Example:
-//
-//	q.Clear()
 func (q *Queue[T]) Clear() {
 	q.mu.Lock()
 	defer q.mu.Unlock()

@@ -21,16 +21,9 @@ import "collections/concurrent/queue"
 
 
 <a name="Queue"></a>
-## type [Queue](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L17-L22>)
+## type [Queue](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L13-L18>)
 
-Queue is a generic, thread\-safe FIFO \(first\-in\-first\-out\) queue implementation backed by a dynamically resizing slice.
-
-The zero value of Queue\[T\] is ready to use without initialization:
-
-```
-var q queue.Queue[int]
-q.Push(1)
-```
+Queue is a generic, thread\-safe FIFO \(first\-in\-first\-out\) queue implementation backed by a dynamically resizing slice.The zero value of Queue\[T\] is ready to use without initialization
 
 Use New\(\) or NewWithCapacity\(\) if you prefer an explicit constructor or want to set an initial capacity. All operations on Queue are safe for concurrent use by multiple goroutines. If you do not need thread\-safety, use the collections/queue package instead for better performance.
 
@@ -40,8 +33,84 @@ type Queue[T any] struct {
 }
 ```
 
+<details><summary>Example</summary>
+<p>
+
+
+
+```go
+package main
+
+import (
+        "collections/concurrent/queue"
+        "fmt"
+        "sync"
+)
+
+func main() {
+        s := queue.New[int]()
+        s.PushMany(1, 2)
+        s.Push(3)
+
+        s2 := queue.NewWithCapacity[int](4)
+        s2.PushMany(1, 2, 3, 4)
+        s2.Push(3)
+        val, ok := s2.Pop()
+        fmt.Println(val, ok)
+
+        val, ok = s.Pop()
+        fmt.Println(val, ok)
+        fmt.Println(s.Len())
+        peek, ok := s.Peek()
+        fmt.Println(peek, ok)
+        fmt.Println(s.Len())
+        s.Pop()
+        s.Pop()
+        val, ok = s.Pop()
+        fmt.Println(val, ok)
+        peek, ok = s.Peek()
+        fmt.Println(peek, ok)
+
+        // The zero value of Queue[T] is ready to use without initialization
+        var s3 queue.Queue[int]
+        s3.Push(1)
+        val, ok = s3.Pop()
+        fmt.Println(val, ok)
+
+        var wg sync.WaitGroup
+        cs := queue.New[int]()
+        for i := 1; i <= 3; i++ {
+                wg.Add(1)
+                go func(v int) {
+                        defer wg.Done()
+                        cs.Push(v)
+                }(i)
+        }
+        wg.Wait()
+        fmt.Println(cs.Len())
+
+}
+```
+
+#### Output
+
+```
+1 true
+1 true
+2
+2 true
+2
+0 false
+0 false
+1 true
+3
+```
+
+</p>
+</details>
+
 <a name="New"></a>
-### func [New](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L38>)
+### func [New](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L30>)
 
 ```go
 func New[T any]() *Queue[T]
@@ -49,14 +118,8 @@ func New[T any]() *Queue[T]
 
 New creates an empty queue of type T with no pre\-allocated capacity. Use this when you don't know in advance how many elements you will push. This is equivalent to creating a queue as \`var q queue.Queue\[int\]\`
 
-Example:
-
-```
-q := queue.New[int]()
-```
-
 <a name="NewWithCapacity"></a>
-### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L52>)
+### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L40>)
 
 ```go
 func NewWithCapacity[T any](capacity int) *Queue[T]
@@ -64,14 +127,8 @@ func NewWithCapacity[T any](capacity int) *Queue[T]
 
 NewWithCapacity creates an empty queue of type T with a pre\-allocated capacity. This avoids repeated allocations if you know roughly how many elements you’ll push.
 
-Example:
-
-```
-s := queue.NewWithCapacity[int](10)
-```
-
 <a name="Queue[T].Clear"></a>
-### func \(\*Queue\[T\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L181>)
+### func \(\*Queue\[T\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L140>)
 
 ```go
 func (q *Queue[T]) Clear()
@@ -79,14 +136,8 @@ func (q *Queue[T]) Clear()
 
 Clear removes all items and reallocates a slice with the initial capacity \(if any\). Use this to shrink the backing array explicitly.
 
-Example:
-
-```
-q.Clear()
-```
-
 <a name="Queue[T].Len"></a>
-### func \(\*Queue\[T\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L155>)
+### func \(\*Queue\[T\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L122>)
 
 ```go
 func (q *Queue[T]) Len() int
@@ -94,14 +145,8 @@ func (q *Queue[T]) Len() int
 
 Len returns the current number of items in the queue.
 
-Example:
-
-```
-n := s.Len()
-```
-
 <a name="Queue[T].Peek"></a>
-### func \(\*Queue\[T\]\) [Peek](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L140>)
+### func \(\*Queue\[T\]\) [Peek](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L111>)
 
 ```go
 func (q *Queue[T]) Peek() (T, bool)
@@ -109,14 +154,8 @@ func (q *Queue[T]) Peek() (T, bool)
 
 Peek returns the front of the queue without removing it. The boolean return is false if the queue is empty.
 
-Example:
-
-```
-value, ok := q.Peek()
-```
-
 <a name="Queue[T].Pop"></a>
-### func \(\*Queue\[T\]\) [Pop](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L92>)
+### func \(\*Queue\[T\]\) [Pop](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L67>)
 
 ```go
 func (q *Queue[T]) Pop() (T, bool)
@@ -124,15 +163,8 @@ func (q *Queue[T]) Pop() (T, bool)
 
 Pop removes and returns the element in front of the queue. The boolean return is false if the queue is empty. The queue may shrink its capacity automatically if it has grown significantly and is mostly empty.
 
-Example:
-
-```
-value, ok := q.Pop()
-if ok { fmt.Println(value) }
-```
-
 <a name="Queue[T].Push"></a>
-### func \(\*Queue\[T\]\) [Push](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L77>)
+### func \(\*Queue\[T\]\) [Push](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L57>)
 
 ```go
 func (q *Queue[T]) Push(item T)
@@ -140,14 +172,8 @@ func (q *Queue[T]) Push(item T)
 
 Push adds a single item to the end of the queue.
 
-Example:
-
-```
-q.Push(42)
-```
-
 <a name="Queue[T].PushMany"></a>
-### func \(\*Queue\[T\]\) [PushMany](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L66>)
+### func \(\*Queue\[T\]\) [PushMany](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L50>)
 
 ```go
 func (q *Queue[T]) PushMany(item ...T)
@@ -155,25 +181,13 @@ func (q *Queue[T]) PushMany(item ...T)
 
 PushMany pushes one or more items onto the queue in order. Equivalent to calling Push repeatedly but more efficient when adding multiple elements.
 
-Example:
-
-```
-q.PushMany(1, 2, 3)
-```
-
 <a name="Queue[T].Reset"></a>
-### func \(\*Queue\[T\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L168>)
+### func \(\*Queue\[T\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L131>)
 
 ```go
 func (q *Queue[T]) Reset()
 ```
 
 Reset clears all items but keeps the current capacity of the underlying slice. This is faster than Clear\(\) when you expect to reuse the same queue size.
-
-Example:
-
-```
-q.Reset()
-```
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

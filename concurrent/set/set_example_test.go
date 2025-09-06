@@ -1,4 +1,4 @@
-package set_example
+package set_test
 
 import (
 	"collections/concurrent/set"
@@ -13,6 +13,11 @@ func ExampleSet() {
 	s.Add(2)
 	s.Add(3)
 	fmt.Println("After Add:", s.Len())
+
+	//The zero value of Set[T] is ready to use without initialization
+	var s3 set.Set[int]
+	s3.Add(1)
+	fmt.Println("After Add:", s3.Len())
 
 	// Add multiple elements at once
 	s.AddMany(3, 4, 5)
@@ -59,6 +64,7 @@ func ExampleSet() {
 
 	// Output:
 	// After Add: 3
+	// After Add: 1
 	// After AddMany: 5
 	// Contains 3? true
 	// Contains 10? false

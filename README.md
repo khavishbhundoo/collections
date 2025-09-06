@@ -1,5 +1,7 @@
-# collections
-A collection of common data structures for Go in both thread safe and non-thread safe variants
+# Collections
+A collection of common data structures for Go in both thread safe and non-thread safe variants.The documentation, 
+example usage are available in their own dedicated page. [Benchmark](benchmark/benchmark.txt) results are available for 
+all the data structures. 
 
 ## Non Thread safe
 
