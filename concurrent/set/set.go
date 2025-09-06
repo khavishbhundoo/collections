@@ -3,10 +3,8 @@ package set
 import "sync"
 
 // Set is a generic, thread-safe set implementation backed by a map[T]struct{}.
-// It stores unique elements of type T. The zero value of Set[T] is ready to use:
-//
-//	var s set.Set[int]
-//	s.Add(1)
+// It stores unique elements of type T.The zero value of Set[T] is ready to use
+// without initialization.
 //
 // Use New() or NewWithCapacity() to explicitly create a set or provide an initial capacity.
 // If you do not need thread-safety, use the collections/set package instead for better performance.

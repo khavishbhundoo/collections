@@ -21,14 +21,9 @@ import "collections/concurrent/set"
 
 
 <a name="Set"></a>
-## type [Set](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L13-L18>)
+## type [Set](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L11-L16>)
 
-Set is a generic, thread\-safe set implementation backed by a map\[T\]struct\{\}. It stores unique elements of type T. The zero value of Set\[T\] is ready to use:
-
-```
-var s set.Set[int]
-s.Add(1)
-```
+Set is a generic, thread\-safe set implementation backed by a map\[T\]struct\{\}. It stores unique elements of type T.The zero value of Set\[T\] is ready to use without initialization.
 
 Use New\(\) or NewWithCapacity\(\) to explicitly create a set or provide an initial capacity. If you do not need thread\-safety, use the collections/set package instead for better performance.
 
@@ -38,8 +33,99 @@ type Set[T comparable] struct {
 }
 ```
 
+<details><summary>Example</summary>
+<p>
+
+
+
+```go
+package main
+
+import (
+        "collections/concurrent/set"
+        "fmt"
+        "sync"
+)
+
+func main() {
+        s := set.New[int]()
+
+        s.Add(1)
+        s.Add(2)
+        s.Add(3)
+        fmt.Println("After Add:", s.Len())
+
+        //The zero value of Set[T] is ready to use without initialization
+        var s3 set.Set[int]
+        s3.Add(1)
+        fmt.Println("After Add:", s3.Len())
+
+        // Add multiple elements at once
+        s.AddMany(3, 4, 5)
+        fmt.Println("After AddMany:", s.Len())
+
+        // Check if an element exists
+        fmt.Println("Contains 3?", s.Contains(3))
+        fmt.Println("Contains 10?", s.Contains(10))
+
+        // Remove an element
+        s.Remove(2)
+        fmt.Println("After Remove 2:", s.Len())
+
+        // Reset the set (keeps capacity)
+        s.Reset()
+        fmt.Println("After Reset:", s.Len())
+
+        // Clear the set (resets map to initial capacity)
+        s.Clear()
+        fmt.Println("After Clear:", s.Len())
+
+        var wg sync.WaitGroup
+        cs := set.New[int]()
+        for i := 1; i <= 3; i++ {
+                wg.Add(1)
+                go func(v int) {
+                        defer wg.Done()
+                        cs.Add(v)
+                }(i)
+        }
+        wg.Wait()
+        fmt.Println(cs.Len())
+
+        for i := 1; i <= 3; i++ {
+                wg.Add(1)
+                go func(v int) {
+                        defer wg.Done()
+                        cs.Add(v)
+                        cs.Remove(v)
+                }(i)
+        }
+        wg.Wait()
+        fmt.Println(cs.Len())
+
+}
+```
+
+#### Output
+
+```
+After Add: 3
+After Add: 1
+After AddMany: 5
+Contains 3? true
+Contains 10? false
+After Remove 2: 4
+After Reset: 0
+After Clear: 0
+3
+0
+```
+
+</p>
+</details>
+
 <a name="New"></a>
-### func [New](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L22>)
+### func [New](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L20>)
 
 ```go
 func New[T comparable]() *Set[T]
@@ -48,7 +134,7 @@ func New[T comparable]() *Set[T]
 New creates an empty set of type T with no pre\-allocated capacity. Equivalent to declaring \`var s set.Set\[int\]\`.
 
 <a name="NewWithCapacity"></a>
-### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L31>)
+### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L29>)
 
 ```go
 func NewWithCapacity[T comparable](capacity int) *Set[T]
@@ -57,7 +143,7 @@ func NewWithCapacity[T comparable](capacity int) *Set[T]
 NewWithCapacity creates an empty set with a capacity hint for the underlying map. Useful when you know approximately how many elements the set will contain.
 
 <a name="Set[T].Add"></a>
-### func \(\*Set\[T\]\) [Add](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L40>)
+### func \(\*Set\[T\]\) [Add](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L38>)
 
 ```go
 func (s *Set[T]) Add(value T)
@@ -66,7 +152,7 @@ func (s *Set[T]) Add(value T)
 Add inserts a value into the set. If the value already exists, it does nothing. Initializes the underlying map if it is nil.
 
 <a name="Set[T].AddMany"></a>
-### func \(\*Set\[T\]\) [AddMany](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L51>)
+### func \(\*Set\[T\]\) [AddMany](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L49>)
 
 ```go
 func (s *Set[T]) AddMany(values ...T)
@@ -75,7 +161,7 @@ func (s *Set[T]) AddMany(values ...T)
 AddMany inserts multiple values into the set. Duplicates are ignored. Initializes the underlying map if it is nil, sizing it to hold all values.
 
 <a name="Set[T].Clear"></a>
-### func \(\*Set\[T\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L109>)
+### func \(\*Set\[T\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L107>)
 
 ```go
 func (s *Set[T]) Clear()
@@ -84,7 +170,7 @@ func (s *Set[T]) Clear()
 Clear removes all elements and resets the underlying map to the initial capacity. Always allocates a new map.
 
 <a name="Set[T].Contains"></a>
-### func \(\*Set\[T\]\) [Contains](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L74>)
+### func \(\*Set\[T\]\) [Contains](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L72>)
 
 ```go
 func (s *Set[T]) Contains(value T) bool
@@ -93,7 +179,7 @@ func (s *Set[T]) Contains(value T) bool
 Contains reports whether a value exists in the set. Safe to call on a zero\-value Set; returns false without allocating.
 
 <a name="Set[T].Len"></a>
-### func \(\*Set\[T\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L86>)
+### func \(\*Set\[T\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L84>)
 
 ```go
 func (s *Set[T]) Len() int
@@ -102,7 +188,7 @@ func (s *Set[T]) Len() int
 Len returns the number of elements in the set. Safe to call on a zero\-value Set; returns 0 without allocating.
 
 <a name="Set[T].Remove"></a>
-### func \(\*Set\[T\]\) [Remove](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L63>)
+### func \(\*Set\[T\]\) [Remove](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L61>)
 
 ```go
 func (s *Set[T]) Remove(value T)
@@ -111,7 +197,7 @@ func (s *Set[T]) Remove(value T)
 Remove deletes a value from the set if it exists. Safe on a zero\-value Set.
 
 <a name="Set[T].Reset"></a>
-### func \(\*Set\[T\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L97>)
+### func \(\*Set\[T\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/set/set.go#L95>)
 
 ```go
 func (s *Set[T]) Reset()
