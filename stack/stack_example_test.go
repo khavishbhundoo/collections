@@ -1,8 +1,9 @@
 package stack_test
 
 import (
-	"collections/stack"
 	"fmt"
+
+	"github.com/khavishbhundoo/collections/stack"
 )
 
 func ExampleStack() {

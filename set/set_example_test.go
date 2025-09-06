@@ -1,8 +1,9 @@
 package set_test
 
 import (
-	"collections/set"
 	"fmt"
+
+	"github.com/khavishbhundoo/collections/set"
 )
 
 func ExampleSet() {

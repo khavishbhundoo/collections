@@ -1,9 +1,10 @@
 package queue_test
 
 import (
-	"collections/concurrent/queue"
 	"fmt"
 	"sync"
+
+	"github.com/khavishbhundoo/collections/concurrent/queue"
 )
 
 func ExampleQueue() {
