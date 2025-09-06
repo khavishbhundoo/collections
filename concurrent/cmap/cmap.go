@@ -3,14 +3,8 @@ package cmap
 import "sync"
 
 // CMap is a generic, thread-safe key-value store with optional capacity hints.
-//
 // The implementation uses an underlying map protected by a sync.RWMutex.
-//
-// The zero value of CMap[K,V] is ready for use without initialization:
-//
-//	var m CMap[string, int]
-//	m.Set("Go", 1)  // works without calling New()
-//	v, ok := m.Get("Go")
+// The zero value of CMap[K,V] is ready for use without initialization.
 //
 // Use New() or NewWithCapacity() if you prefer an explicit constructor
 // or want to set an initial capacity. All operations are safe for

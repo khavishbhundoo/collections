@@ -1,4 +1,4 @@
-package example
+package cmap_test
 
 import (
 	"collections/concurrent/cmap"
@@ -9,7 +9,7 @@ import (
 
 func ExampleCMap() {
 
-	var m cmap.CMap[string, int]
+	var m = cmap.New[string, int]()
 
 	// Insert values
 	m.Set("Go", 1)
@@ -19,6 +19,11 @@ func ExampleCMap() {
 	if v, ok := m.Get("Go"); ok {
 		fmt.Println("Go =", v)
 	}
+
+	// The zero value of CMap[K,V] is ready to use without initialization
+	var n cmap.CMap[string, int]
+	n.Set("Go", 1)
+	_, _ = n.Get("Go")
 
 	// Check existence
 	fmt.Println("Contains C#?", m.Contains("C#"))

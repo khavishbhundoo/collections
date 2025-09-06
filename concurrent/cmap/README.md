@@ -22,19 +22,9 @@ import "collections/concurrent/cmap"
 
 
 <a name="CMap"></a>
-## type [CMap](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L18-L23>)
+## type [CMap](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L12-L17>)
 
-CMap is a generic, thread\-safe key\-value store with optional capacity hints.
-
-The implementation uses an underlying map protected by a sync.RWMutex.
-
-The zero value of CMap\[K,V\] is ready for use without initialization:
-
-```
-var m CMap[string, int]
-m.Set("Go", 1)  // works without calling New()
-v, ok := m.Get("Go")
-```
+CMap is a generic, thread\-safe key\-value store with optional capacity hints. The implementation uses an underlying map protected by a sync.RWMutex. The zero value of CMap\[K,V\] is ready for use without initialization.
 
 Use New\(\) or NewWithCapacity\(\) if you prefer an explicit constructor or want to set an initial capacity. All operations are safe for concurrent use by multiple goroutines.
 
@@ -44,8 +34,133 @@ type CMap[K comparable, V any] struct {
 }
 ```
 
+<details><summary>Example</summary>
+<p>
+
+
+
+```go
+package main
+
+import (
+        "collections/concurrent/cmap"
+        "fmt"
+        "sort"
+)
+
+func main() {
+
+        var m = cmap.New[string, int]()
+
+        // Insert values
+        m.Set("Go", 1)
+        m.Set("C#", 2)
+
+        // Retrieve values
+        if v, ok := m.Get("Go"); ok {
+                fmt.Println("Go =", v)
+        }
+
+        // The zero value of CMap[K,V] is ready to use without initialization
+        var n cmap.CMap[string, int]
+        n.Set("Go", 1)
+        _, _ = n.Get("Go")
+
+        // Check existence
+        fmt.Println("Contains C#?", m.Contains("C#"))
+        fmt.Println("Len =", m.Len())
+
+        // Get all keys
+        keys := m.Keys()
+        sort.Strings(keys)
+        fmt.Println("Keys:", keys)
+
+        // Delete a key
+        m.Delete("Go")
+        fmt.Println("Contains Go after delete?", m.Contains("Go"))
+
+        // Reset map
+        m.Reset()
+        fmt.Println("Len after Reset:", m.Len())
+
+        // Clear map
+        m.Set("Rust", 3)
+        m.Clear()
+        fmt.Println("Len after Clear:", m.Len())
+
+}
+```
+
+#### Output
+
+```
+Go = 1
+Contains C#? true
+Len = 2
+Keys: [C# Go]
+Contains Go after delete? false
+Len after Reset: 0
+Len after Clear: 0
+```
+
+</p>
+</details>
+
+<details><summary>Example (Concurrent)</summary>
+<p>
+
+
+
+```go
+package main
+
+import (
+        "collections/concurrent/cmap"
+        "fmt"
+        "sync"
+)
+
+func main() {
+        m := cmap.NewWithCapacity[string, int](50)
+        var wg sync.WaitGroup
+
+        // Start 5 goroutines that write to the map
+        for i := 0; i < 5; i++ {
+                wg.Add(1)
+                go func(id int) {
+                        defer wg.Done()
+                        for j := 0; j < 10; j++ {
+                                key := fmt.Sprintf("w%d_%d", id, j)
+                                m.Set(key, j)
+                        }
+                }(i)
+        }
+
+        // Wait for all writers to finish before inspecting the map
+        wg.Wait()
+
+        // Now read concurrently after all writes are done
+        for i := 0; i < 5; i++ {
+                wg.Add(1)
+                go func(id int) {
+                        defer wg.Done()
+                        keys := m.Keys()
+                        fmt.Printf("Reader %d sees %d keys\n", id, len(keys))
+                }(i)
+        }
+
+        wg.Wait()
+
+        // Final state of the map
+        fmt.Println("Final map length:", m.Len())
+}
+```
+
+</p>
+</details>
+
 <a name="New"></a>
-### func [New](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L26>)
+### func [New](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L20>)
 
 ```go
 func New[K comparable, V any]() *CMap[K, V]
@@ -54,7 +169,7 @@ func New[K comparable, V any]() *CMap[K, V]
 New returns an empty CMap with no pre\-allocated capacity.
 
 <a name="NewWithCapacity"></a>
-### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L37>)
+### func [NewWithCapacity](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L31>)
 
 ```go
 func NewWithCapacity[K comparable, V any](capacity int) *CMap[K, V]
@@ -65,7 +180,7 @@ NewWithCapacity returns an empty CMap with a capacity hint.
 Supplying a capacity reduces allocations if the expected number of key\-value pairs is known in advance.
 
 <a name="CMap[K, V].Clear"></a>
-### func \(\*CMap\[K, V\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L117>)
+### func \(\*CMap\[K, V\]\) [Clear](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L111>)
 
 ```go
 func (c *CMap[K, V]) Clear()
@@ -74,7 +189,7 @@ func (c *CMap[K, V]) Clear()
 Clear removes all entries and allocates a new underlying map. Unlike Reset, Clear releases the old allocation to the runtime.
 
 <a name="CMap[K, V].Contains"></a>
-### func \(\*CMap\[K, V\]\) [Contains](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L77>)
+### func \(\*CMap\[K, V\]\) [Contains](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L71>)
 
 ```go
 func (c *CMap[K, V]) Contains(key K) bool
@@ -83,7 +198,7 @@ func (c *CMap[K, V]) Contains(key K) bool
 Contains reports whether key exists in the map.
 
 <a name="CMap[K, V].Delete"></a>
-### func \(\*CMap\[K, V\]\) [Delete](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L70>)
+### func \(\*CMap\[K, V\]\) [Delete](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L64>)
 
 ```go
 func (c *CMap[K, V]) Delete(key K)
@@ -92,7 +207,7 @@ func (c *CMap[K, V]) Delete(key K)
 Delete removes key and its value, if present. It does nothing if the key is not in the map.
 
 <a name="CMap[K, V].Get"></a>
-### func \(\*CMap\[K, V\]\) [Get](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L57>)
+### func \(\*CMap\[K, V\]\) [Get](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L51>)
 
 ```go
 func (c *CMap[K, V]) Get(key K) (V, bool)
@@ -101,7 +216,7 @@ func (c *CMap[K, V]) Get(key K) (V, bool)
 Get returns the value for key and reports whether it was present. Returns the zero value of V if the key does not exist.
 
 <a name="CMap[K, V].Keys"></a>
-### func \(\*CMap\[K, V\]\) [Keys](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L93>)
+### func \(\*CMap\[K, V\]\) [Keys](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L87>)
 
 ```go
 func (c *CMap[K, V]) Keys() []K
@@ -110,7 +225,7 @@ func (c *CMap[K, V]) Keys() []K
 Keys returns a snapshot of all keys in the map. The returned slice does not reflect later modifications.
 
 <a name="CMap[K, V].Len"></a>
-### func \(\*CMap\[K, V\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L85>)
+### func \(\*CMap\[K, V\]\) [Len](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L79>)
 
 ```go
 func (c *CMap[K, V]) Len() int
@@ -119,7 +234,7 @@ func (c *CMap[K, V]) Len() int
 Len returns the number of entries in the map.
 
 <a name="CMap[K, V].Reset"></a>
-### func \(\*CMap\[K, V\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L105>)
+### func \(\*CMap\[K, V\]\) [Reset](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L99>)
 
 ```go
 func (c *CMap[K, V]) Reset()
@@ -128,7 +243,7 @@ func (c *CMap[K, V]) Reset()
 Reset removes all entries while keeping the current allocation. Use Reset to reuse the map without triggering new allocations.
 
 <a name="CMap[K, V].Set"></a>
-### func \(\*CMap\[K, V\]\) [Set](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L46>)
+### func \(\*CMap\[K, V\]\) [Set](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/cmap/cmap.go#L40>)
 
 ```go
 func (c *CMap[K, V]) Set(key K, value V)
