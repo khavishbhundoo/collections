@@ -3,7 +3,7 @@
 # cmap
 
 ```go
-import "collections/concurrent/cmap"
+import "github.com/khavishbhundoo/collections/concurrent/cmap"
 ```
 
 ## Index
@@ -43,9 +43,10 @@ type CMap[K comparable, V any] struct {
 package main
 
 import (
-        "collections/concurrent/cmap"
         "fmt"
         "sort"
+
+        "github.com/khavishbhundoo/collections/concurrent/cmap"
 )
 
 func main() {
@@ -115,9 +116,10 @@ Len after Clear: 0
 package main
 
 import (
-        "collections/concurrent/cmap"
         "fmt"
         "sync"
+
+        "github.com/khavishbhundoo/collections/concurrent/cmap"
 )
 
 func main() {

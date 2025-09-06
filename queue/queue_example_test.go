@@ -1,8 +1,9 @@
 package queue_test
 
 import (
-	"collections/queue"
 	"fmt"
+
+	"github.com/khavishbhundoo/collections/queue"
 )
 
 func ExampleQueue() {

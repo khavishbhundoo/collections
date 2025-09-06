@@ -1,9 +1,10 @@
 package stack_test
 
 import (
-	"collections/concurrent/stack"
 	"fmt"
 	"sync"
+
+	"github.com/khavishbhundoo/collections/concurrent/stack"
 )
 
 func ExampleStack() {

@@ -3,7 +3,7 @@
 # stack
 
 ```go
-import "collections/concurrent/stack"
+import "github.com/khavishbhundoo/collections/concurrent/stack"
 ```
 
 ## Index
@@ -42,9 +42,10 @@ type Stack[T any] struct {
 package main
 
 import (
-        "collections/concurrent/stack"
         "fmt"
         "sync"
+
+        "github.com/khavishbhundoo/collections/concurrent/stack"
 )
 
 func main() {

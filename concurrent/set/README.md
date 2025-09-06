@@ -3,7 +3,7 @@
 # set
 
 ```go
-import "collections/concurrent/set"
+import "github.com/khavishbhundoo/collections/concurrent/set"
 ```
 
 ## Index
@@ -42,9 +42,10 @@ type Set[T comparable] struct {
 package main
 
 import (
-        "collections/concurrent/set"
         "fmt"
         "sync"
+
+        "github.com/khavishbhundoo/collections/concurrent/set"
 )
 
 func main() {

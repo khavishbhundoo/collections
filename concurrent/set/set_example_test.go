@@ -1,9 +1,10 @@
 package set_test
 
 import (
-	"collections/concurrent/set"
 	"fmt"
 	"sync"
+
+	"github.com/khavishbhundoo/collections/concurrent/set"
 )
 
 func ExampleSet() {

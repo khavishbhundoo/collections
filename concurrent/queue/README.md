@@ -3,7 +3,7 @@
 # queue
 
 ```go
-import "collections/concurrent/queue"
+import "github.com/khavishbhundoo/collections/concurrent/queue"
 ```
 
 ## Index
@@ -23,7 +23,7 @@ import "collections/concurrent/queue"
 <a name="Queue"></a>
 ## type [Queue](<https://github.com/khavishbhundoo/collections/blob/main/concurrent/queue/queue.go#L13-L18>)
 
-Queue is a generic, thread\-safe FIFO \(first\-in\-first\-out\) queue implementation backed by a dynamically resizing slice.The zero value of Queue\[T\] is ready to use without initialization
+Queue is a generic, thread\-safe FIFO \(first\-in\-first\-out\) queue implementation backed by a dynamically resizing slice.The zero value of Queue\[T\] is ready to use without initialization.
 
 Use New\(\) or NewWithCapacity\(\) if you prefer an explicit constructor or want to set an initial capacity. All operations on Queue are safe for concurrent use by multiple goroutines. If you do not need thread\-safety, use the collections/queue package instead for better performance.
 
@@ -42,9 +42,10 @@ type Queue[T any] struct {
 package main
 
 import (
-        "collections/concurrent/queue"
         "fmt"
         "sync"
+
+        "github.com/khavishbhundoo/collections/concurrent/queue"
 )
 
 func main() {

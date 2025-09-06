@@ -1,10 +1,11 @@
 package cmap_test
 
 import (
-	"collections/concurrent/cmap"
 	"fmt"
 	"sort"
 	"sync"
+
+	"github.com/khavishbhundoo/collections/concurrent/cmap"
 )
 
 func ExampleCMap() {

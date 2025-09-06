@@ -3,7 +3,7 @@
 # queue
 
 ```go
-import "collections/queue"
+import "github.com/khavishbhundoo/collections/queue"
 ```
 
 ## Index
@@ -42,8 +42,9 @@ type Queue[T any] struct {
 package main
 
 import (
-        "collections/queue"
         "fmt"
+
+        "github.com/khavishbhundoo/collections/queue"
 )
 
 func main() {
