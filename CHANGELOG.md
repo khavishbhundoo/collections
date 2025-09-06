@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.1](https://github.com/khavishbhundoo/collections/compare/0.1.0...0.1.1) (2025-09-06)
+
+
+### Build
+
+* Update module path  ([#12](https://github.com/khavishbhundoo/collections/issues/12)) ([aa9192a](https://github.com/khavishbhundoo/collections/commit/aa9192ad70885ca5706cc895e40b6d063e4c2ed8))
+
+
+### Documentation updates
+
+* Update examples  ([#10](https://github.com/khavishbhundoo/collections/issues/10)) ([0269d44](https://github.com/khavishbhundoo/collections/commit/0269d44270b4dac2091e7bfddfebebc77e2e7572))
+
 ## [0.1.0](https://github.com/khavishbhundoo/collections/compare/0.0.1...0.1.0) (2025-09-06)
 
 
