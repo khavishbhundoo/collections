@@ -1,12 +1,14 @@
 package queue
 
 import (
+	"runtime"
 	"testing"
 )
 
 // BenchmarkQueue_Push benchmarks pushing N items into the queue
 func BenchmarkQueue_Push(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	q := New[int]()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -18,6 +20,7 @@ func BenchmarkQueue_Push(b *testing.B) {
 // pre-allocated with enough capacity to avoid reallocations.
 func BenchmarkQueue_PushWithCapacity(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	q := NewWithCapacity[int](b.N)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -28,6 +31,7 @@ func BenchmarkQueue_PushWithCapacity(b *testing.B) {
 // BenchmarkQueue_PushMany benchmarks pushing N items at once using PushMany
 func BenchmarkQueue_PushMany(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	q := New[int]()
 	items := make([]int, 1000)
 	for i := 0; i < len(items); i++ {
@@ -42,6 +46,7 @@ func BenchmarkQueue_PushMany(b *testing.B) {
 // BenchmarkQueue_Pop benchmarks popping N items from the queue
 func BenchmarkQueue_Pop(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	q := New[int]()
 	for i := 0; i < b.N; i++ {
 		q.Push(i)
@@ -68,6 +73,7 @@ func BenchmarkQueue_PopWithCapacity(b *testing.B) {
 // BenchmarkQueue_PushPop benchmarks mixed push/pop operations
 func BenchmarkQueue_PushPop(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	q := New[int]()
 	for i := 0; i < b.N; i++ {
 		q.Push(i)
@@ -80,6 +86,7 @@ func BenchmarkQueue_PushPop(b *testing.B) {
 // BenchmarkQueue_PushPopWithCapacity benchmarks mixed push/pop with pre-allocated capacity
 func BenchmarkQueue_PushPopWithCapacity(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	q := NewWithCapacity[int](b.N)
 	for i := 0; i < b.N; i++ {
 		q.Push(i)
@@ -92,6 +99,7 @@ func BenchmarkQueue_PushPopWithCapacity(b *testing.B) {
 // BenchmarkQueue_Peek benchmarks repeated peeks
 func BenchmarkQueue_Peek(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	q := New[int]()
 	for i := 0; i < 1000; i++ {
 		q.Push(i)
@@ -105,6 +113,7 @@ func BenchmarkQueue_Peek(b *testing.B) {
 // BenchmarkQueue_Reset benchmarks repeated resets
 func BenchmarkQueue_Reset(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	q := NewWithCapacity[int](b.N)
 	for i := 0; i < 1000; i++ {
 		q.Push(i)
@@ -118,6 +127,7 @@ func BenchmarkQueue_Reset(b *testing.B) {
 // BenchmarkQueue_Clear benchmarks repeated clears
 func BenchmarkQueue_Clear(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	q := NewWithCapacity[int](b.N)
 	for i := 0; i < 1000; i++ {
 		q.Push(i)

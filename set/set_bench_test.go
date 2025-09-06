@@ -1,9 +1,13 @@
 package set
 
-import "testing"
+import (
+	"runtime"
+	"testing"
+)
 
 func BenchmarkSet_Add(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	s := New[int]()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -13,6 +17,7 @@ func BenchmarkSet_Add(b *testing.B) {
 
 func BenchmarkSet_Add_PreSized(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	s := NewWithCapacity[int](b.N)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -22,6 +27,7 @@ func BenchmarkSet_Add_PreSized(b *testing.B) {
 
 func BenchmarkSet_AddMany100_FreshEmpty(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	values := make([]int, 100)
 	for i := 0; i < 100; i++ {
 		values[i] = i
@@ -35,6 +41,7 @@ func BenchmarkSet_AddMany100_FreshEmpty(b *testing.B) {
 
 func BenchmarkSet_AddMany100_FreshPreSized(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	values := make([]int, 100)
 	for i := 0; i < 100; i++ {
 		values[i] = i
@@ -48,6 +55,7 @@ func BenchmarkSet_AddMany100_FreshPreSized(b *testing.B) {
 
 func BenchmarkSet_AddMany100_AmortizedPreSized(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	values := make([]int, 100)
 	for i := 0; i < 100; i++ {
 		values[i] = i
@@ -61,6 +69,7 @@ func BenchmarkSet_AddMany100_AmortizedPreSized(b *testing.B) {
 
 func BenchmarkSet_Remove(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	s := New[int]()
 	for i := 0; i < 1000; i++ {
 		s.Add(i)
@@ -75,6 +84,7 @@ func BenchmarkSet_Remove(b *testing.B) {
 
 func BenchmarkSet_Contains(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	const n = 1000
 	s := New[int]()
 	for i := 0; i < n; i++ {
@@ -93,6 +103,7 @@ func BenchmarkSet_Contains(b *testing.B) {
 
 func BenchmarkSet_Size(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	s := New[int]()
 	for i := 0; i < 1000; i++ {
 		s.Add(i)
@@ -105,6 +116,7 @@ func BenchmarkSet_Size(b *testing.B) {
 
 func BenchmarkSet_Reset_1k(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	s := New[int]()
 	vals := make([]int, 1000)
 	for i := range vals {
@@ -120,6 +132,7 @@ func BenchmarkSet_Reset_1k(b *testing.B) {
 
 func BenchmarkSet_Clear_1k_InitialCapacityZero(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	s := New[int]()
 	vals := make([]int, 1000)
 	for i := range vals {
@@ -135,6 +148,7 @@ func BenchmarkSet_Clear_1k_InitialCapacityZero(b *testing.B) {
 
 func BenchmarkSet_Clear_1k_PreSized(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	s := NewWithCapacity[int](1000)
 	vals := make([]int, 1000)
 	for i := range vals {
