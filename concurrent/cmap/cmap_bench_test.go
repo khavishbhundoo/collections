@@ -1,6 +1,7 @@
 package cmap
 
 import (
+	"runtime"
 	"strconv"
 	"sync"
 	"testing"
@@ -12,6 +13,7 @@ import (
 
 func BenchmarkCMap_Set(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := New[string, int]()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -21,6 +23,7 @@ func BenchmarkCMap_Set(b *testing.B) {
 
 func BenchmarkCMap_Set_PreSized(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := NewWithCapacity[string, int](b.N)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -30,6 +33,7 @@ func BenchmarkCMap_Set_PreSized(b *testing.B) {
 
 func BenchmarkCMap_Get(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := New[string, int]()
 	for i := 0; i < b.N; i++ {
 		m.Set(strconv.Itoa(i), i)
@@ -42,6 +46,7 @@ func BenchmarkCMap_Get(b *testing.B) {
 
 func BenchmarkCMap_Contains(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := New[string, int]()
 	for i := 0; i < b.N; i++ {
 		m.Set(strconv.Itoa(i), i)
@@ -54,6 +59,7 @@ func BenchmarkCMap_Contains(b *testing.B) {
 
 func BenchmarkCMap_ConcurrentSet(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := New[string, int]()
 	b.ResetTimer()
 	b.RunParallel(func(pb *testing.PB) {
@@ -68,6 +74,7 @@ func BenchmarkCMap_ConcurrentSet(b *testing.B) {
 
 func BenchmarkCMap_ConcurrentSet_PreSized(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := NewWithCapacity[string, int](b.N)
 	b.ResetTimer()
 	b.RunParallel(func(pb *testing.PB) {
@@ -82,6 +89,7 @@ func BenchmarkCMap_ConcurrentSet_PreSized(b *testing.B) {
 
 func BenchmarkCMap_ConcurrentGet(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := New[string, int]()
 	const N = 100000
 	for i := 0; i < N; i++ {
@@ -101,6 +109,7 @@ func BenchmarkCMap_ConcurrentGet(b *testing.B) {
 
 func BenchmarkCMap_ZeroValueSet(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	var m CMap[int, int]
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -110,6 +119,7 @@ func BenchmarkCMap_ZeroValueSet(b *testing.B) {
 
 func BenchmarkCMap_Reset(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := New[int, int]()
 	for i := 0; i < 10000; i++ {
 		m.Set(i, i)
@@ -122,6 +132,7 @@ func BenchmarkCMap_Reset(b *testing.B) {
 
 func BenchmarkCMap_Clear(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := New[int, int]()
 	for i := 0; i < 10000; i++ {
 		m.Set(i, i)
@@ -134,6 +145,7 @@ func BenchmarkCMap_Clear(b *testing.B) {
 
 func BenchmarkCMap_Keys(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := New[int, int]()
 	for i := 0; i < 10000; i++ {
 		m.Set(i, i)
@@ -146,6 +158,7 @@ func BenchmarkCMap_Keys(b *testing.B) {
 
 func BenchmarkCMap_ConcurrentMixed(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := New[int, int]()
 	var wg sync.WaitGroup
 	const workers = 8
@@ -170,6 +183,7 @@ func BenchmarkCMap_ConcurrentMixed(b *testing.B) {
 
 func BenchmarkMap_Set(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := make(map[string]int)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -179,6 +193,7 @@ func BenchmarkMap_Set(b *testing.B) {
 
 func BenchmarkMap_Set_PreSized(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := make(map[string]int, b.N)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -188,6 +203,7 @@ func BenchmarkMap_Set_PreSized(b *testing.B) {
 
 func BenchmarkMap_Get(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := make(map[string]int)
 	for i := 0; i < b.N; i++ {
 		m[strconv.Itoa(i)] = i
@@ -200,6 +216,7 @@ func BenchmarkMap_Get(b *testing.B) {
 
 func BenchmarkMap_Contains(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := make(map[string]int)
 	for i := 0; i < b.N; i++ {
 		m[strconv.Itoa(i)] = i
@@ -212,6 +229,7 @@ func BenchmarkMap_Contains(b *testing.B) {
 
 func BenchmarkMap_ConcurrentSet(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := make(map[string]int)
 	var mu sync.Mutex
 	b.ResetTimer()
@@ -229,6 +247,7 @@ func BenchmarkMap_ConcurrentSet(b *testing.B) {
 
 func BenchmarkMap_ConcurrentSet_PreSized(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := make(map[string]int, b.N)
 	var mu sync.Mutex
 	b.ResetTimer()
@@ -246,6 +265,7 @@ func BenchmarkMap_ConcurrentSet_PreSized(b *testing.B) {
 
 func BenchmarkMap_ConcurrentGet(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := make(map[string]int)
 	const N = 100000
 	for i := 0; i < N; i++ {
@@ -267,6 +287,7 @@ func BenchmarkMap_ConcurrentGet(b *testing.B) {
 
 func BenchmarkMap_ZeroValueSet(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	var m map[int]int // zero-value map
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -279,6 +300,7 @@ func BenchmarkMap_ZeroValueSet(b *testing.B) {
 
 func BenchmarkMap_Keys(b *testing.B) {
 	b.ReportAllocs()
+	b.Cleanup(func() { runtime.GC() })
 	m := make(map[int]int)
 	for i := 0; i < 10000; i++ {
 		m[i] = i
