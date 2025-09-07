@@ -1,3 +1,5 @@
+[![Go Reference](https://pkg.go.dev/badge/github.com/khavishbhundoo/collections.svg)](https://pkg.go.dev/github.com/khavishbhundoo/collections)
+
 # Collections
 A collection of common data structures for Go in both thread safe and non-thread safe variants.The documentation, 
 example usage are available in their own dedicated page. [Benchmark](benchmark/benchmark.txt) results are available for 
@@ -11,8 +13,9 @@ go get -u github.com/khavishbhundoo/collections
 
 ## Design Principles
 
-- General-Purpose Design
-  These data structures are designed to perform well enough across a wide range of use cases rather than being optimized 
+- General-Purpose Design 
+
+These data structures are designed to perform well enough across a wide range of use cases rather than being optimized 
   for a type of operation.
 
 - Zero-Value Usability
