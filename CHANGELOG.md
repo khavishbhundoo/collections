@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2](https://github.com/khavishbhundoo/collections/compare/0.1.1...0.1.2) (2025-09-07)
+
+
+### Documentation updates
+
+* Add design priniples in README ([#13](https://github.com/khavishbhundoo/collections/issues/13)) ([ebcdf51](https://github.com/khavishbhundoo/collections/commit/ebcdf51bf7fbbbe7736e78bcf78fbcd092ff559b))
+* Add go reference badge ([#15](https://github.com/khavishbhundoo/collections/issues/15)) ([42a1588](https://github.com/khavishbhundoo/collections/commit/42a15888e3de0c7c2bdd6d0fe6bd03593f5b63d0))
+
 ## [0.1.1](https://github.com/khavishbhundoo/collections/compare/0.1.0...0.1.1) (2025-09-06)
 
 
