@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/khavishbhundoo/collections/compare/0.1.2...v0.1.3) (2025-09-14)
+
+
+### Build
+
+* tags for go package should have v prefix ([#16](https://github.com/khavishbhundoo/collections/issues/16)) ([a12d58b](https://github.com/khavishbhundoo/collections/commit/a12d58bbfc372860b76b5d45eb60f7cda026e77b))
+
 ## [0.1.2](https://github.com/khavishbhundoo/collections/compare/0.1.1...0.1.2) (2025-09-07)
 
 
